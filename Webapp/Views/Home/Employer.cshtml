@@ -2,7 +2,7 @@
 @{ 
     ViewData["Title"] = "Employés"; 
 } 
-<h2>Gérer les employés</h2> 
+<h2 class="text-center">Gérer les employés</h2> 
 @if (TempData["DeleteMessage"] != null)
 {
     <div class="alert alert-success">
@@ -59,7 +59,8 @@
                 <tr><td colspan="6" class="text-center">Aucun employé disponible.</td></tr>
             } 
         </tbody>
-    </table>
+    </table> 
+    <a asp-action="index" class="btn btn-success"><i class="fas fa-arrow-left"></i> Retour </a>
 </form>
 </div> 
 </div>
