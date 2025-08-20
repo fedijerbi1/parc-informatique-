@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7xl/MrRTyI4=",
+  "dgSpecHash": "GmmXk01/x4k=",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+  "projectFilePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
@@ -175,9 +175,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp.Features 4.8.0-3.final requires Microsoft.CodeAnalysis.Common (= 4.8.0-3.final) but version Microsoft.CodeAnalysis.Common 4.8.0 was resolved.",
-      "projectPath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "filePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
         "net8.0"
@@ -187,9 +187,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp.Features 4.8.0-3.final requires Microsoft.CodeAnalysis.CSharp (= 4.8.0-3.final) but version Microsoft.CodeAnalysis.CSharp 4.8.0 was resolved.",
-      "projectPath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "filePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "libraryId": "Microsoft.CodeAnalysis.CSharp",
       "targetGraphs": [
         "net8.0"
@@ -199,9 +199,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp.Features 4.8.0-3.final requires Microsoft.CodeAnalysis.Workspaces.Common (= 4.8.0-3.final) but version Microsoft.CodeAnalysis.Workspaces.Common 4.8.0 was resolved.",
-      "projectPath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "filePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Workspaces.Common",
       "targetGraphs": [
         "net8.0"
@@ -211,9 +211,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp.Features 4.8.0-3.final requires Microsoft.CodeAnalysis.CSharp.Workspaces (= 4.8.0-3.final) but version Microsoft.CodeAnalysis.CSharp.Workspaces 4.8.0 was resolved.",
-      "projectPath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "filePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "libraryId": "Microsoft.CodeAnalysis.CSharp.Workspaces",
       "targetGraphs": [
         "net8.0"
@@ -223,9 +223,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Features 4.8.0-3.final requires Microsoft.CodeAnalysis.Common (= 4.8.0-3.final) but version Microsoft.CodeAnalysis.Common 4.8.0 was resolved.",
-      "projectPath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "filePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
         "net8.0"
@@ -235,9 +235,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Features 4.8.0-3.final requires Microsoft.CodeAnalysis.Workspaces.Common (= 4.8.0-3.final) but version Microsoft.CodeAnalysis.Workspaces.Common 4.8.0 was resolved.",
-      "projectPath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "filePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Workspaces.Common",
       "targetGraphs": [
         "net8.0"
@@ -247,9 +247,9 @@
       "code": "NU1608",
       "level": "Warning",
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Scripting.Common 4.8.0-3.final requires Microsoft.CodeAnalysis.Common (= 4.8.0-3.final) but version Microsoft.CodeAnalysis.Common 4.8.0 was resolved.",
-      "projectPath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\user\\desktop\\finale folder\\webapp\\webapp\\Webapp.csproj",
+      "filePath": "C:\\Users\\user\\Desktop\\copie\\webapp\\webapp\\Webapp.csproj",
       "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
         "net8.0"
