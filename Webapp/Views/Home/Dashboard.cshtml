@@ -1,0 +1,283 @@
+@model IEnumerable<Webapp.Models.Equipment>  
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Dashboard";  
+    var repartition = ViewBag.Repartition as IEnumerable<dynamic> ?? new List<dynamic>();
+    var repType = ViewBag.RepType as IEnumerable<dynamic> ?? new List<dynamic>();
+    
+    // Calculer les totaux par statut depuis la répartition
+    var totalEquipements = repartition.Sum(r => (int)r.Count);
+    var enPanne = repartition.Where(r => r.Statut == "En Panne").Sum(r => (int)r.Count);
+    var disponible = repartition.Where(r => r.Statut == "En service").Sum(r => (int)r.Count);
+    var assigne = repartition.Where(r => r.Statut == "Hors service").Sum(r => (int)r.Count);
+}  
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">@totalEquipements</h4>
+                            <p class="mb-0">Equipements Total</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-laptop fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">@enPanne</h4>
+                            <p class="mb-0">En Panne</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">@disponible</h4>
+                            <p class="mb-0">En service</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="mb-0">@assigne</h4>
+                            <p class="mb-0">Affecté</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-user fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+<div class="mt-5">
+    <h4 class="text-danger mb-4">
+        <i class="fas fa-exclamation-triangle"></i> 
+        Équipements en Panne - Action Requise
+    </h4>  
+<table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="text-dark"><i class="fas fa-laptop"></i> Numero de Série </th>
+                <th class="text-dark"><i class="fas fa-tag"></i> Type</th>
+                <th class="text-dark"><i class="fas fa-industry"></i> Marque</th>
+                <th class="text-dark"><i class="fas fa-cogs"></i> Modele</th> 
+                <th class="text-dark"><i class="fas fa-calendar-alt"></i> Date de fin de garentie </th> 
+                <th class="text-dark"><i class="fas fa-shield-alt"></i> Statut garentie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any(r => r.Statut == "En Panne"))
+            {
+                foreach (var item in Model)
+                {
+                    if (item.Statut == "En Panne")
+                    {
+                        <tr>
+                            <td>@item.NumeroSerie</td>
+                            <td>@item.Type</td>
+                            <td>@item.Marque</td>
+                            <td>@item.Modele</td>
+                            <td>@item.DateFinGarantie</td>  
+                            <td>@(item.DateFinGarantie > DateTime.Now ? "Valide" : "Expiré")</td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr><td colspan="3" class="text-center">Aucun équipement en panne.</td></tr>
+            }
+        </tbody> 
+</table> 
+<h4 class="text-warning  mt-4">
+    <i class="fas fa-exclamation-triangle"></i> Équipements en en fin de garantie    
+</h4> 
+<table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="text-dark"><i class="fas fa-laptop"></i> Numero de Série </th>
+                <th class="text-dark"><i class="fas fa-tag"></i> Type</th>
+                <th class="text-dark"><i class="fas fa-industry"></i> Marque</th>
+                <th class="text-dark"><i class="fas fa-cogs"></i> Modele</th>
+                <th class="text-dark"><i class="fas fa-calendar-alt"></i> Date de fin de garentie </th>
+                <th class="text-dark"><i class="fas fa-shield-alt"></i> Statut garentie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any(r => r.DateFinGarantie < DateTime.Now))
+            {
+                foreach (var item in Model)
+                {
+                    if (item.DateFinGarantie < DateTime.Now)
+                    {
+                        <tr>
+                            <td>@item.NumeroSerie</td>
+                            <td>@item.Type</td>
+                            <td>@item.Marque</td>
+                            <td>@item.Modele</td>
+                            <td>@item.DateFinGarantie</td>
+                            <td>@item.Statut </td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr><td colspan="3" class="text-center">Aucun équipement en fin de garantie.</td></tr>
+            }
+        </tbody>
+</table>
+
+           
+<div class="container mt-4">
+    <div class="row">
+        <!-- Graphique par Type -->
+        <div class="col-md-6">
+            <h3>📊 Répartition par Type</h3>
+            <canvas id="chartType" width="400" height="200"></canvas>
+        </div>
+        
+        <!-- Graphique par Statut -->
+        <div class="col-md-6">
+            <h3>📈 Répartition par Statut</h3>
+            <canvas id="chartStatut" width="400" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Inclure Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            // Récupérer les données de répartition
+            const repartition = @Html.Raw(JsonSerializer.Serialize(repartition));
+            const repType = @Html.Raw(JsonSerializer.Serialize(repType));
+
+            console.log("Données répartition reçues :", repartition);
+            console.log("Données repType reçues :", repType);
+
+            // ========== GRAPHIQUE PAR TYPE ==========
+            if (repType && repType.length > 0) {
+                new Chart(document.getElementById('chartType'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: repType.map(x => x.Label || x.label || 'Unknown'),
+                        datasets: [{
+                            data: repType.map(x => x.Value || x.value || 0),
+                            backgroundColor: [
+                                '#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', 
+                                '#9966FF', '#FF9F40', '#32CD32', '#C9CBCF'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Répartition par Type d\'équipement'
+                            }
+                        }
+                    }
+                });
+            } else {
+                document.getElementById('chartType').style.display = 'none';
+            }
+
+            // ========== GRAPHIQUE PAR STATUT ==========
+            if (repartition && repartition.length > 0) {
+                // Regrouper par statut
+                const statutData = {};
+                repartition.forEach(item => {
+                    const statut = item.Statut || 'Unknown';
+                    if (statutData[statut]) {
+                        statutData[statut] += item.Count || 0;
+                    } else {
+                        statutData[statut] = item.Count || 0;
+                    }
+                });
+
+                const statutLabels = Object.keys(statutData);
+                const statutValues = Object.values(statutData);
+                const statutColors = statutLabels.map(statut => {
+                    switch(statut) {
+                        case 'En service': return '#28a745';
+                        case 'En Panne': return '#dc3545';
+                        case 'Hors service': return '#ffc107'; 
+                        case 'Affecté': return '#007bff';
+                        default: return '#6c757d';
+                    }
+                });
+
+                new Chart(document.getElementById('chartStatut'), {
+                    type: 'pie',
+                    data: {
+                        labels: statutLabels,
+                        datasets: [{
+                            data: statutValues,
+                            backgroundColor: statutColors,
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Répartition par Statut'
+                            }
+                        }
+                    }
+                });
+            } else {
+                document.getElementById('chartStatut').style.display = 'none';
+            }
+
+        } catch (error) {
+            console.error("Erreur lors de la création des graphiques:", error);
+        }
+    });
+</script> 
+
+
+    
+   

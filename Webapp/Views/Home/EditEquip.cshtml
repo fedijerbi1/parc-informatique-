@@ -1,0 +1,63 @@
+@model Equipment 
+@{
+    ViewData["Title"] = "Modifier un équipement";
+} 
+<form asp-action="EditE" method="post"> 
+   
+
+
+
+
+ <div class="mb-3">
+        <label asp-for="NumeroSerie"></label>
+        <input asp-for="NumeroSerie" class="form-control" />
+        <span asp-validation-for="NumeroSerie" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Type"></label>
+        <input asp-for="Type" class="form-control" />
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Marque"></label>
+        <input asp-for="Marque" class="form-control" />
+        <span asp-validation-for="Marque" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Modele"></label>
+        <input asp-for="Modele" class="form-control" />
+        <span asp-validation-for="Modele" class="text-danger"></span>
+    </div> 
+   
+    <div class="mb-3">
+        <label asp-for="DateAchat"></label>
+        <input asp-for="DateAchat" class="form-control" />
+        <span asp-validation-for="DateAchat" class="text-danger"></span>
+    </div>  
+    <div class="mb-3">
+        <label asp-for="DateFinGarantie"></label>
+        <input asp-for="DateFinGarantie" class="form-control" />
+        <span asp-validation-for="DateFinGarantie" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div> 
+    <div class="mb-3">
+        <label asp-for="Statut"></label>
+        <select asp-for="Statut" class="form-control">
+            <option value="En service">En service</option>
+            <option value="En Panne">En Panne</option>
+            <option value="Hors service">Hors service</option>
+        </select>
+        <span asp-validation-for="Statut" class="text-danger"></span>
+    <input type="hidden" asp-for="Id" />  
+    </div> 
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Modifier</button> 
+        <a asp-action="Equipement" class="btn btn-secondary">Annuler</a>
+    </div>
+</form>

@@ -1,0 +1,106 @@
+@model Webapp.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Inscription";  
+        Layout = "~/Views/Shared/_login.cshtml";
+
+    
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Créer un compte</h2>
+                
+                <form method="post" asp-action="Register" asp-controller="Account">
+                    @Html.AntiForgeryToken()
+                    
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label">Nom complet</label>
+                        <input asp-for="FullName" class="form-control" placeholder="Votre nom complet" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="votre@email.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Mot de passe</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Au moins 6 caractères" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">Confirmer le mot de passe</label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Retapez votre mot de passe" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Role" class="form-label">Rôle</label>
+                        <select asp-for="Role" class="form-select" id="roleSelect">
+                            <option value="">-- Sélectionner un rôle --</option>
+                            <option value="Admin">Administrateur</option>
+                            <option value="Employer">Employé</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3" id="companyNameDiv" style="display: none;">
+                        <label asp-for="CompanyName" class="form-label">Nom de l'entreprise</label>
+                        <input asp-for="CompanyName" class="form-control" placeholder="Nom de votre entreprise" />
+                        <span asp-validation-for="CompanyName" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3" id="adminLevelDiv" style="display: none;">
+                        <label asp-for="AdminLevel" class="form-label">Niveau administrateur</label>
+                        <select asp-for="AdminLevel" class="form-select">
+                            <option value="Standard">Standard</option>
+                            <option value="Super">Super</option>
+                        </select>
+                        <span asp-validation-for="AdminLevel" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Créer le compte</button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="mb-0">Déjà un compte?</p>
+                    <a asp-action="Login" asp-controller="Account" class="btn btn-outline-secondary">Se connecter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        document.getElementById('roleSelect').addEventListener('change', function() {
+            var role = this.value;
+            var companyDiv = document.getElementById('companyNameDiv');
+            var adminDiv = document.getElementById('adminLevelDiv');
+            
+            if (role === 'Employer') {
+                companyDiv.style.display = 'block';
+                adminDiv.style.display = 'none';
+            } else if (role === 'Admin') {
+                companyDiv.style.display = 'none';
+                adminDiv.style.display = 'block';
+            } else {
+                companyDiv.style.display = 'none';
+                adminDiv.style.display = 'none';
+            }
+        });
+    </script>
+}

@@ -1,0 +1,55 @@
+@model Employee 
+
+
+<form asp-action="EditEm" method="post">
+    <div class="mb-3">
+        <label asp-for="Nom"></label>
+        <input asp-for="Nom" class="form-control" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Prenom"></label>
+        <input asp-for="Prenom" class="form-control" />
+        <span asp-validation-for="Prenom" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Telephone"></label>
+        <input asp-for="Telephone" class="form-control" />
+        <span asp-validation-for="Telephone" class="text-danger"></span>
+    </div> 
+    <div class="mb-3">
+        <label asp-for="Poste"></label>
+        <input asp-for="Poste" class="form-control" />
+        <span asp-validation-for="Poste" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Departement"></label>
+        <input asp-for="Departement" class="form-control" />
+        <span asp-validation-for="Departement" class="text-danger"></span>
+    </div>  
+    <div class="mb-3">
+        <label asp-for="DateEmbauche"></label>
+        <input asp-for="DateEmbauche" class="form-control" />
+        <span asp-validation-for="DateEmbauche" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="IsActif">Statut </label>
+        <select asp-for="IsActif" class="form-control">
+            <option value=true>actif</option>
+            <option value=false">inactif</option>
+
+        </select>
+        <span asp-validation-for="IsActif" class="text-danger"></span> 
+        <input type="hidden" asp-for="Id" /> 
+        </div> 
+        <div class="mb-3">  
+    <button type="submit" class="btn btn-primary">Modifier</button> 
+    <a asp-action="Employer" class="btn btn-secondary">Annuler</a> 
+    </div>
+</form>

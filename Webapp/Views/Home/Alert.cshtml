@@ -1,0 +1,33 @@
+@model IEnumerable<Webapp.Models.Equipment> 
+@{
+    ViewData["Title"] = "Alert";
+}
+@foreach (var equip in Model)
+{
+    if (equip.DateFinGarantie < DateTime.Now.AddDays(30))
+    {
+    <div class="alert alert-warning" role="alert">
+        <strong>@equip.Type</strong> - @equip.NumeroSerie<br />
+       
+        Fin de garantie : @equip.DateFinGarantie<br />
+        Statut : @equip.Statut 
+        <p>Équipement est proche de la fin de garantie</p>
+    </div> 
+    } 
+    if (equip.Statut == "En Panne")
+    {
+    <div class="alert alert-danger" role="alert">
+        <strong>@equip.Type</strong> @equip.Marque - @equip.NumeroSerie<br />
+        Statut : @equip.Statut
+        <p>Est en panne</p>
+    </div> 
+    } 
+    if (equip.DateDerniereAffectation<DateTime.Now.AddDays(-90)&& equip.Statut=="Disponible")
+    { 
+    <div class="alert alert-info" role="alert">
+        <strong>@equip.Type</strong> @equip.Marque - @equip.NumeroSerie<br />
+        Statut : @equip.Statut
+        <p>Non Affecté non affectés depuis plus de 90 jours</p>
+    </div>
+     }
+}

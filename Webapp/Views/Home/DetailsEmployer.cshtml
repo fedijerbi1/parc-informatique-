@@ -1,0 +1,44 @@
+@model Employee
+
+
+<form asp-action="DetailsEmployer" method="get">
+    <input type="hidden" asp-for="Id" />
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-primary mb-4">Détails de l'employé @Model.Nom @Model.Prenom</h2>
+
+        <dl class="row">
+            <dt class="col-sm-3">Nom</dt>
+            <dd class="col-sm-9">@Model.Nom</dd>
+
+            <dt class="col-sm-3">Prénom</dt>
+            <dd class="col-sm-9">@Model.Prenom</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Téléphone</dt>
+            <dd class="col-sm-9">@Model.Telephone</dd>
+
+            <dt class="col-sm-3">Poste</dt>
+            <dd class="col-sm-9">@Model.Poste</dd>
+
+            <dt class="col-sm-3">Date d'embauche</dt>
+            <dd class="col-sm-9">
+                @Model.DateEmbauche.ToString("dd/MM/yyyy")
+            </dd>
+
+            <dt class="col-sm-3">Statut</dt>
+            <dd class="col-sm-9">
+              <div class="badge badge-@(Model.IsActif == true ? "success" : "danger")" > <span class=" text-dark">
+                    @(Model.IsActif == true ? "Actif" : "Inactif")
+                </span></div>
+            </dd>
+        </dl>
+
+
+            <a asp-action="Index" class="btn btn-secondary">⬅ Retour</a>
+        </div>
+    </div>
+</div> 
+</form> 

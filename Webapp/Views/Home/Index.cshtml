@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Home page ";
+}
+
+<div class="e">
+    <h2 style="align-center">Bienvenue, @User.Identity.Name</h2>
+    <div class="shadow-sm">
+
+        <div class="text-center">
+            <h1 class=" fas fa-desktop"> Parc-informatique  </h1>
+            <p>Vous pouvez gérer votre parc ici.</p>
+        </div>
+    </div>
+</div>
+<section class="container mt-3">
+  
+
+    <div class="row ">
+       
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Équipements</h5>
+                    <p class="card-text">Gérer vos équipements informatiques.</p>
+                    <a asp-controller="Home" asp-action="Equipement" class="btn btn-success"><i class="fas fa-desktop"></i> Voir les équipements</a>
+                </div>
+            </div>
+        </div>   
+ 
+
+
+    <div class="col-md-4">
+            <div class="card mb-4 shadow-sm ">
+                <div class="card-body">
+                    <h5 class="card-title">Gérer les Employés</h5>
+                    <p class="card-text">Vous pouvez gérer vos Employés ici.</p>
+                    <a asp-controller="Home"
+                        asp-action="Employer"
+                       class="btn btn-success"><i class="fas fa-user"></i> Voir les employés </a>
+                  </div>   
+                      </div>  
+                           </div> 
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm ">
+                <div class="card-body">
+                    <h5 class="card-title">Affectation</h5>
+                    <p class="card-text">Vous pouvez affecter un équipement à un employé.</p>
+                  <a asp-controller="Home" asp-action="Affectation" class="btn btn-success"> <i class="fas fa-exchange-alt"></i> Affecter</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm ">
+                <div class="card-body">
+                    <h5 class="card-title">Tableau de bord</h5>
+                    <p class="card-text">Voir le tableau de bord.</p>
+                    <a asp-controller="Home" asp-action="Dashboard" class="btn btn-success"><i class="fas fa-dashboard"></i> Voir le tableau de bord</a>
+                </div>
+            </div>
+        </div>
+
+      
+      
+        
+
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm ">
+                <div class="card-body">
+                    <h5 class="card-title">Gerer les Alerts</h5>
+                    <p class="card-text">Vous pouvez Voir vos Alerts ici.</p>
+                    <a asp-controller="Home"
+                        asp-action="Alert"
+                       class="btn btn-success"><i class="fas fa-user"></i> Voir les Alerts </a>
+                  </div>   
+                      </div>  
+                            </div> 
+</div>
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  
+   
+    
+    
+    
+    
+    
+    
+
+
+</section>

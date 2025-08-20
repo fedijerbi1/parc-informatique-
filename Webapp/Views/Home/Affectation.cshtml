@@ -1,0 +1,220 @@
+@model Webapp.Models.Affectation 
+@{
+    ViewData["Title"] = "Affectation";
+    var employees = ViewBag.Employees as List<Webapp.Models.Employee> ?? new List<Webapp.Models.Employee>();
+    var equipment = ViewBag.Equipment as List<Webapp.Models.Equipment> ?? new List<Webapp.Models.Equipment>();
+     var affectations = ViewBag.Affectations as List<Webapp.Models.Affectation> ?? new List<Webapp.Models.Affectation>();
+
+}
+
+<h2 class="text-center">Affectation d'un Équipement</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage as string))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="container">
+    <form method="post" asp-action="Affectation">
+        @Html.AntiForgeryToken()
+        
+        <div class="mb-3">
+            <label asp-for="EmployeeId" class="form-label">Employé</label>
+            <select asp-for="EmployeeId" class="form-select">
+                <option value="">-- Sélectionner un employé --</option>
+                @foreach (var employee in employees)
+                {
+                    <option value="@employee.Id">@employee.Prenom @employee.Nom - @employee.Poste</option>
+                }
+            </select>
+            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="EquipmentId" class="form-label">Équipement</label>
+            <select asp-for="EquipmentId" class="form-select">
+                <option value="">-- Sélectionner un équipement --</option>
+                @foreach (var equip in equipment)
+                {
+                    <option value="@equip.Id">@equip.NumeroSerie - @equip.Marque (@equip.Type)</option>
+                }
+            </select>
+            <span asp-validation-for="EquipmentId" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="DateAffectation" class="form-label">Date d'affectation</label>
+            <input asp-for="DateAffectation" type="date" class="form-control" />
+            <span asp-validation-for="DateAffectation" class="text-danger"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="Commentaires" class="form-label">Commentaires (optionnel)</label>
+            <textarea asp-for="Commentaires" class="form-control" rows="3" placeholder="Commentaires ou notes sur cette affectation..."></textarea>
+        </div>
+        
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Affecter l'équipement</button>
+            <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+
+<div class="mt-4">
+    <h4>Affectations actuelles</h4>
+
+    
+    @if (affectations.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Employé</th>
+                    <th>Équipement</th>
+                    <th>Date d'affectation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var affectation in affectations)
+                {
+                    <tr>
+                        <td>@affectation.Employee?.Prenom @affectation.Employee?.Nom</td>
+                        <td>@affectation.Equipment?.Type - @affectation.Equipment?.NumeroSerie</td>
+                        <td>@affectation.DateAffectation.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <form method="post" asp-action="RetournerEquipement" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="affectationId" value="@affectation.Id" />
+                                <button type="submit" class="btn btn-sm btn-warning" 
+                                        onclick="return confirm('Êtes-vous sûr de vouloir retourner cet équipement?')">
+                                    Retourner
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">Aucune affectation active.</p>
+    }
+</div> 
+
+@{ 
+     var allEmployees = ViewBag.AllEmployees as List<Webapp.Models.Employee> ?? new List<Webapp.Models.Employee>();
+    var equipe = ViewBag.AllEquipment as List<Webapp.Models.Equipment> ?? new List<Webapp.Models.Equipment>();
+    var historique = ViewBag.AllAffectations as List<Webapp.Models.Affectation> ?? new List<Webapp.Models.Affectation>(); 
+        string chaine = ""; 
+}
+
+<h4>Historique des Equipement </h4>  
+<table class="table table-tripped"> 
+
+<tr> 
+<th>Serie-unique</th> 
+<th>Marque</th> 
+<th>Type</th> 
+<th>qui a utlise </th> 
+<th>Date d'utilisation</th> 
+<th>duree</th> 
+</tr>   
+@foreach (var equip in equipe) 
+{
+    if (historique.Any(h => h.EquipmentId == equip.Id))
+    {
+        foreach (var item in historique.Where(h => h.EquipmentId == equip.Id)) {  
+            TimeSpan difference;
+            if (item.IsActif == false && item.DateRetour != null) 
+            {
+                difference = item.DateRetour.Value - item.DateAffectation;
+            } 
+            else 
+            {
+                difference = DateTime.Now - item.DateAffectation;
+            }
+
+            <tr>
+                <td>@item.Equipment.NumeroSerie</td>
+                <td>@item.Equipment.Marque</td>
+                <td>@item.Equipment.Type</td>
+               <td>@item.Employee?.Prenom @item.Employee?.Nom</td>
+                <td>@item.DateAffectation.ToString("dd/MM/yyyy")</td> 
+                <td>@difference.Days jours</td> 
+              </tr>} 
+              } 
+    else { 
+        <tr>
+            <td>@equip.NumeroSerie</td>
+            <td>@equip.Marque</td>
+            <td>@equip.Type</td>
+            <td>Aucun utilisateur</td>
+            <td>Aucune date</td>
+            <td>0 jours</td>
+        </tr>
+    }}
+</table>
+<h4>Historique des Employee</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Departement</th>
+            <th>Poste</th>
+            <th>Equipements Utilisés</th> 
+        </tr>
+    </thead>
+    <tbody>
+        @if (allEmployees.Any())
+        {
+        foreach (var employee in allEmployees)
+        { chaine = ""; 
+              var equipementsEmployee = historique.Where(h => h.EmployeeId == employee.Id).ToList();
+        
+        if (equipementsEmployee.Any())
+        {
+            // Créer la liste des équipements utilisés
+            var equipementsList = equipementsEmployee
+                .Select(item => $"{item.Equipment?.NumeroSerie} ({item.Equipment?.Marque}, {item.Equipment?.Type})")
+                .Where(s => !string.IsNullOrEmpty(s))
+                .Distinct() // Éviter les doublons
+                .ToList();
+            
+            chaine = string.Join(" | ", equipementsList);
+        }
+        else
+        {
+            chaine = "Aucun équipement utilisé";
+        }
+    
+
+                <tr>
+                    <td>@employee.Nom</td>
+                    <td>@employee.Prenom</td>
+                    <td>@employee.Departement</td>
+                    <td>@employee.Poste</td> 
+                    <td>@chaine</td> 
+                </tr>
+        }
+        }
+        else
+        {
+            <tr><td colspan="5" class="text-center">Aucun employé disponible.</td></tr>
+        }
+    </tbody>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,386 @@
+using System.Diagnostics;
+using System.Linq; 
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Webapp.Models; 
+using Webapp.Data;
+using Microsoft.AspNetCore.Authorization;
+
+namespace Webapp.Controllers
+{
+    public class HomeController : Controller
+    {
+        private  ILogger<HomeController> _logger;
+        private  AppDbContext _context;
+
+        public HomeController(ILogger<HomeController> logger, AppDbContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
+        [Authorize]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        private async Task LoadAllDataToViewBag()
+        {
+            ViewBag.AllEmployees = await _context.Employees.ToListAsync();
+            ViewBag.AllEquipment = await _context.Equipment.ToListAsync();
+            ViewBag.AllAffectations = await _context.Affectations
+                .Include(a => a.Employee)
+                .Include(a => a.Equipment)
+                .OrderByDescending(a => a.DateAffectation)
+                .ToListAsync();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Affectation()
+        { 
+            await LoadAllDataToViewBag();
+            ViewBag.Employees = await _context.Employees.Where(e => e.IsActif).ToListAsync();
+            ViewBag.Equipment = await _context.Equipment.Where(e => e.Statut == "En service").ToListAsync();
+
+            // Charger les affectations actuelles avec les données liées
+            var affectations = await _context.Affectations
+                .Where(a => a.IsActif)
+                .Include(a => a.Employee)
+                .Include(a => a.Equipment)
+                .OrderByDescending(a => a.DateAffectation)
+                .ToListAsync();
+            ViewBag.Affectations = affectations;
+            
+            return View(new Affectation());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Affectation(Affectation affectation)
+        {
+            if (ModelState.IsValid)
+            {
+                // Vérifier que l'équipement est disponible
+                var equipment = await _context.Equipment.FindAsync(affectation.EquipmentId);
+                if (equipment != null && equipment.Statut == "En service")
+                {
+                    // Créer l'affectation
+                    _context.Affectations.Add(affectation);
+                    
+                    // Mettre à jour le statut de l'équipement
+                    equipment.Statut = "Affecté";
+                    equipment.EmployeeId = affectation.EmployeeId;                    
+                    equipment.DateDerniereAffectation = null;
+
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Équipement affecté avec succès.";
+                    return RedirectToAction("Affectation");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "L'équipement sélectionné n'est pas disponible.");
+                }
+            }
+
+            // Recharger les listes en cas d'erreur
+            ViewBag.Employees = await _context.Employees.Where(e => e.IsActif).ToListAsync();
+            ViewBag.Equipment = await _context.Equipment.Where(e => e.Statut == "En service").ToListAsync(); 
+            await LoadAllDataToViewBag();
+           
+            return View(affectation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RetournerEquipement(int affectationId)
+        {
+            var affectation = _context.Affectations
+                .Include(a => a.Equipment)
+                .FirstOrDefault(a => a.Id == affectationId && a.IsActif); 
+            var equip = _context.Equipment.FirstOrDefault(e => e.Id == affectation.EquipmentId);
+
+            if (affectation != null)
+            {
+                // Marquer l'affectation comme inactive
+                affectation.IsActif = false;
+                affectation.DateRetour = DateTime.Now;
+
+                // Remettre l'équipement en disponible
+                if (affectation.Equipment != null)
+                {
+                    affectation.Equipment.Statut = "En service";
+                    affectation.Equipment.EmployeeId = null; 
+                    equip.DateDerniereAffectation = DateTime.Now; 
+                }
+
+                _context.SaveChanges();
+                TempData["SuccessMessage"] = "Équipement retourné avec succès.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Affectation introuvable.";
+            }
+
+            return RedirectToAction("Affectation");
+        }
+        [Authorize]
+        public IActionResult Composants()
+        {
+
+            return View();
+        }
+
+        
+      
+
+        public IActionResult AjouterEmployer()
+        {
+            return View(); 
+        }
+
+      
+        public IActionResult AjouterEquip ()
+        {
+            return View ();
+        }
+        [HttpPost]
+        public IActionResult Create(Equipment equipe)
+        {
+           
+
+            if (ModelState.IsValid)
+            {
+                _context.Equipment.Add(equipe);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View("AjouterEquip");
+        }  
+        [HttpGet]
+        public IActionResult DeleteEquip()
+        {
+            
+            var list = _context.Equipment.ToList();
+            return View(list);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteEquip(string numeroSerie)
+        {
+
+
+            var equip = _context.Equipment.FirstOrDefault(e => e.NumeroSerie == numeroSerie);
+
+
+            _context.Equipment.Remove(equip);
+            _context.SaveChanges();
+            TempData["DeleteMessage"] = $"Équipement '{equip.Type}' supprimé avec succès.";
+            return RedirectToAction(nameof(DeleteEquip));
+        }
+        [HttpGet]
+[Authorize]
+        public async Task<IActionResult> Equipement()
+        {
+            var list = await _context.Equipment.ToListAsync();
+            return View(list);
+        } 
+      
+        public IActionResult CreateE(Employee employe)
+        { 
+            if (ModelState.IsValid)
+            {
+                _context.Employees.Add(employe);
+                _context.SaveChanges();
+                return RedirectToAction("Employer");
+            }
+            else
+            {
+                return View("AjouterEmployer");
+            }
+
+        } 
+        public IActionResult EditEquip(int id)
+        {
+            var equip = _context.Equipment.FirstOrDefault(e => e.Id == id);
+            if (equip == null)
+            {
+                return NotFound();
+            }
+            return View(equip);
+        } 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditE(Equipment equipe)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("EditEquip", equipe);
+            }
+
+            _context.Equipment.Update(equipe);
+            _context.SaveChanges();
+            return RedirectToAction("Equipement");
+        }  
+        [Authorize]
+        public IActionResult Employer()
+        {
+            var list = _context.Employees.ToList();
+            return View(list);
+        }
+        public async Task<IActionResult> Alert()
+        {
+            var list = await _context.Equipment.ToListAsync();
+            return View(list);
+        }
+
+
+        public async Task<IActionResult> Supprime(int id)
+        {
+            var e = await _context.Equipment.FirstOrDefaultAsync(e => e.Id == id);
+
+            if (e == null)
+            {
+                return NotFound();
+            }
+
+            else
+            {
+                var er = await _context.Affectations.Where(e => e.EquipmentId == id).ToListAsync();
+                if (er.Any())
+                {
+                    _context.Affectations.RemoveRange(er);
+                }
+
+                _context.Equipment.Remove(e);
+                await _context.SaveChangesAsync();
+                TempData["DeleteMessage"] = $"Équipement '{e.Type}' supprimé avec succès.";
+                return RedirectToAction("Equipement");
+            } 
+            
+        
+           
+
+            
+
+        }
+public async Task<IActionResult> EditEmployer(int id)
+        {
+            var employe = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
+            if (employe == null)
+            {
+                return NotFound();
+            } 
+
+           return View(employe);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken] 
+        public async Task<IActionResult> EditEm(Employee employe)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("EditEmployer", employe);
+            }
+
+            _context.Employees.Update(employe);
+            await _context.SaveChangesAsync();
+            TempData["EditMessage"] = $"Employé '{employe.Nom}' modifié avec succès.";
+            return RedirectToAction("Employer");
+        }
+[Authorize(Roles = "Admin") ]
+        public async Task<IActionResult> DeleteEm(int id)
+        {
+            var employe = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
+
+            if (employe == null)
+            {
+                return NotFound();
+            }
+            var e = await _context.Affectations.Where(e => e.EmployeeId == id).ToListAsync();
+            if (e.Any())
+            {
+                _context.Affectations.RemoveRange(e);
+            }
+
+            _context.Employees.Remove(employe);
+            await _context.SaveChangesAsync();
+            TempData["DeleteMessage"] = $"Employé '{employe.Nom}' supprimé avec succès.";
+            return RedirectToAction("Employer");
+        }
+
+
+
+
+
+        public IActionResult DetailsEmployer(int id)
+        {
+
+            var employe = _context.Employees.FirstOrDefault(e => e.Id == id);
+            if (employe == null)
+            {
+                return NotFound();
+            }
+            return View(employe);
+        }
+
+        public IActionResult DetailsEquip(int id) 
+
+        {
+
+            var equipement = _context.Equipment.FirstOrDefault(e => e.Id == id);
+            if (equipement == null)
+            {
+                return NotFound();
+            }
+            return View(equipement);
+        } 
+        public async Task<IActionResult> Dashboard()
+        {
+            var data = await _context.Equipment.ToListAsync(); 
+            if (data == null || !data.Any())
+            {
+                return NotFound();
+            }
+           
+            
+                var repartition = await _context.Equipment
+                    .GroupBy(e => new { e.Type, e.Statut })
+                    .Select(g => new
+                    {
+                        Type = g.Key.Type,
+                        Statut = g.Key.Statut,
+                        Count = g.Count()
+                     }
+                    )
+                .ToListAsync(); 
+
+
+                 var repType = await _context.Equipment
+        .GroupBy(e => e.Type)
+        .Select(g => new { Label = g.Key, Value = g.Count() })
+        .ToListAsync();
+
+    ViewBag.RepType = repType;
+            
+           ViewBag.Repartition = repartition;
+            return View(data);
+        }
+       
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    }
+
+}

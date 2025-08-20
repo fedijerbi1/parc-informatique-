@@ -1,0 +1,52 @@
+@model Equipment 
+
+
+<form asp-action="DetailsEmployer" method="get">
+    <input type="hidden" asp-for="Id" />
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-primary mb-4">Détails de </h2>
+
+        <dl class="row">
+          
+
+            <dt class="col-sm-3">Numéro de série</dt>
+            <dd class="col-sm-9">@Model.NumeroSerie</dd>
+
+            <dt class="col-sm-3">Modèle</dt>
+            <dd class="col-sm-9">@Model.Modele</dd>
+
+            <dt class="col-sm-3">Type</dt>
+            <dd class="col-sm-9">@Model.Type</dd>
+
+            <dt class="col-sm-3">Marque</dt>
+            <dd class="col-sm-9">@Model.Marque</dd> 
+
+             <dt class="col-sm-3">Date d'achat</dt>
+            <dd class="col-sm-9">
+                @Model.DateAchat
+            </dd>
+
+            <dt class="col-sm-3">Date de fin de garantie</dt>
+            <dd class="col-sm-9">
+                @Model.DateFinGarantie
+            </dd>
+
+            <dt class="col-sm-3">Statut</dt>
+            <dd class="col-sm-9">
+                <span class="text-dark">
+                  @Model.Statut 
+                </span>
+            </dd>  
+             <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd> 
+
+        
+        </dl>
+
+
+            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Retour</a>
+        </div>
+    </div>
+</div> 
+</form> 
