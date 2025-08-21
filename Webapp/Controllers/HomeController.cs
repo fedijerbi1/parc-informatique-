@@ -74,7 +74,7 @@ namespace Webapp.Controllers
                     
                     // Mettre à jour le statut de l'équipement
                     equipment.EmployeeId = affectation.EmployeeId;                    
-                    equipment.DateDerniereAffectation = null;
+                    equipment.DateDerniereAffectation = DateTime.Now;
 
                     await _context.SaveChangesAsync();
                     TempData["SuccessMessage"] = "Équipement affecté avec succès.";

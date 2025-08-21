@@ -1,0 +1,34 @@
+@model IEnumerable<Webapp.Models.Equipment>
+@{
+    ViewData["Title"] = "Supprimer un équipement";
+}
+<h2>Supprimer un équipement par numéro de série</h2>
+@if (TempData["DeleteMessage"] != null)
+{
+    <div class="alert alert-info">@TempData["DeleteMessage"]</div>
+}
+<div class="container mt-3">
+    <form asp-action="DeleteEquip" method="post">
+        <div class="mb-3">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var equip in Model)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="numeroSerie" id="equip_@equip.Id" value="@equip.NumeroSerie" required />
+                        <label class="form-check-label" for="equip_@equip.Id">
+                            @equip.Type - @equip.NumeroSerie
+                        </label>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">Aucun équipement disponible.</p>
+            }
+        </div>
+        <button type="submit" class="btn btn-danger" @(Model == null || !Model.Any() ? "disabled" : null)>Supprimer</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Retour</a>
+    </form>
+    <p class="text-muted mt-3">Cette action supprimera définitivement l'équipement correspondant.</p>
+</div>

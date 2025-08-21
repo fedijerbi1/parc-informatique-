@@ -50,21 +50,7 @@
                         </select>
                         <span asp-validation-for="Role" class="text-danger"></span>
                     </div>
-                    
-                    <div class="mb-3" id="companyNameDiv" style="display: none;">
-                        <label asp-for="CompanyName" class="form-label">Nom de l'entreprise</label>
-                        <input asp-for="CompanyName" class="form-control" placeholder="Nom de votre entreprise" />
-                        <span asp-validation-for="CompanyName" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="mb-3" id="adminLevelDiv" style="display: none;">
-                        <label asp-for="AdminLevel" class="form-label">Niveau administrateur</label>
-                        <select asp-for="AdminLevel" class="form-select">
-                            <option value="Standard">Standard</option>
-                            <option value="Super">Super</option>
-                        </select>
-                        <span asp-validation-for="AdminLevel" class="text-danger"></span>
-                    </div>
+                   
                     
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Créer le compte</button>

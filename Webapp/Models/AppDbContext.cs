@@ -30,8 +30,7 @@ namespace Webapp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Configure Identity inheritance
-            modelBuilder.Entity<AdminUser>().HasBaseType<ApplicationUser>();
-            modelBuilder.Entity<EmployerUser>().HasBaseType<ApplicationUser>();
+          
         }
     }
 }
