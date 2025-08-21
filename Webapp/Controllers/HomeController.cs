@@ -49,7 +49,6 @@ namespace Webapp.Controllers
             ViewBag.Employees = await _context.Employees.Where(e => e.IsActif).ToListAsync();
             ViewBag.Equipment = await _context.Equipment.Where(e => e.Statut == "En service").ToListAsync();
 
-            // Charger les affectations actuelles avec les données liées
             var affectations = await _context.Affectations
                 .Where(a => a.IsActif)
                 .Include(a => a.Employee)
@@ -75,7 +74,6 @@ namespace Webapp.Controllers
                     _context.Affectations.Add(affectation);
                     
                     // Mettre à jour le statut de l'équipement
-                    equipment.Statut = "Affecté";
                     equipment.EmployeeId = affectation.EmployeeId;                    
                     equipment.DateDerniereAffectation = null;
 
@@ -115,7 +113,6 @@ namespace Webapp.Controllers
                 // Remettre l'équipement en disponible
                 if (affectation.Equipment != null)
                 {
-                    affectation.Equipment.Statut = "En service";
                     affectation.Equipment.EmployeeId = null; 
                     equip.DateDerniereAffectation = DateTime.Now; 
                 }

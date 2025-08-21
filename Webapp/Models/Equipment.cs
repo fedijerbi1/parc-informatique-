@@ -17,14 +17,14 @@ namespace Webapp.Models
 
         public DateTime? DateAchat { get; set; }
         public DateTime? DateFinGarantie { get; set; }
-        public string Statut { get; set; } = "En service"; // En service, Assigné, En maintenance, Hors service
+        public string Statut { get; set; } = "En service"; 
         public string? Description { get; set; }
 
         public DateTime? DateDerniereAffectation { get; set; } 
 
 
 
-        // Relation avec l'employé (si assigné)
+   
         public int? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
     }
