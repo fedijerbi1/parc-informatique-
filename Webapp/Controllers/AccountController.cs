@@ -81,7 +81,6 @@ namespace Webapp.Controllers
                         FullName = model.FullName,
                         Email = model.Email,
                         UserName = model.Email,
-                        AdminLevel = model.AdminLevel ?? "Standard"
                     };
                 }
                 else
@@ -91,7 +90,6 @@ namespace Webapp.Controllers
                         FullName = model.FullName,
                         Email = model.Email,
                         UserName = model.Email,
-                        CompanyName = model.CompanyName ?? "Non spécifié"
                     };
                 }
 

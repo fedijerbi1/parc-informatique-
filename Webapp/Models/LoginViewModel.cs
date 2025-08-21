@@ -41,10 +41,6 @@ namespace Webapp.Models
         [Display(Name = "Rôle")]
         public string Role { get; set; } = string.Empty;
 
-        [Display(Name = "Nom de l'entreprise")]
-        public string? CompanyName { get; set; }
-
-        [Display(Name = "Niveau administrateur")]
-        public string? AdminLevel { get; set; }
+      
     }
 }
