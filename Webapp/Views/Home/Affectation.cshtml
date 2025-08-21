@@ -21,7 +21,11 @@
     <div class="alert alert-danger">
         @ViewBag.ErrorMessage
     </div>
-}
+} 
+
+@if (User.IsInRole("Admin"))
+{
+
 
 <div class="container">
     <form method="post" asp-action="Affectation">
@@ -67,7 +71,7 @@
             <a asp-action="Index" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
-</div>
+</div>}
 
 <div class="mt-4">
     <h4>Affectations actuelles</h4>
@@ -81,7 +85,8 @@
                     <th>Employé</th>
                     <th>Équipement</th>
                     <th>Date d'affectation</th>
-                    <th>Actions</th>
+                    @if(User.IsInRole("Admin")){
+                    <th>Actions</th> }
                 </tr>
             </thead>
             <tbody>
@@ -91,6 +96,7 @@
                         <td>@affectation.Employee?.Prenom @affectation.Employee?.Nom</td>
                         <td>@affectation.Equipment?.Type - @affectation.Equipment?.NumeroSerie</td>
                         <td>@affectation.DateAffectation.ToString("dd/MM/yyyy")</td>
+                       @if(User.IsInRole("Admin")){ 
                         <td>
                             <form method="post" asp-action="RetournerEquipement" style="display: inline;">
                                 @Html.AntiForgeryToken()
@@ -101,6 +107,7 @@
                                 </button>
                             </form>
                         </td>
+                        }
                     </tr>
                 }
             </tbody>
