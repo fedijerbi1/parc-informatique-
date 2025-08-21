@@ -21,7 +21,7 @@
         <p>L'équipement est en panne.</p>
     </div> 
     } 
-    if (equip.DateDerniereAffectation < DateTime.Now.AddDays(-90) && equip.Statut == "Disponible")
+    if (equip.DateDerniereAffectation != null && equip.DateDerniereAffectation < DateTime.Now.AddDays(-90) && equip.Statut == "En service")
     { 
     <div class="alert alert-info" role="alert">
         <strong>@equip.Type</strong> @equip.Marque - @equip.NumeroSerie<br />
