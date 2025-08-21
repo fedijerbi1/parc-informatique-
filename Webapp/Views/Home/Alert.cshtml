@@ -8,10 +8,9 @@
     {
     <div class="alert alert-warning" role="alert">
         <strong>@equip.Type</strong> - @equip.NumeroSerie<br />
-       
         Fin de garantie : @equip.DateFinGarantie<br />
         Statut : @equip.Statut 
-        <p>Équipement est proche de la fin de garantie</p>
+        <p>L'équipement est proche de la fin de garantie.</p>
     </div> 
     } 
     if (equip.Statut == "En Panne")
@@ -19,15 +18,17 @@
     <div class="alert alert-danger" role="alert">
         <strong>@equip.Type</strong> @equip.Marque - @equip.NumeroSerie<br />
         Statut : @equip.Statut
-        <p>Est en panne</p>
+        <p>L'équipement est en panne.</p>
     </div> 
     } 
-    if (equip.DateDerniereAffectation<DateTime.Now.AddDays(-90)&& equip.Statut=="Disponible")
+    if (equip.DateDerniereAffectation != null && equip.DateDerniereAffectation < DateTime.Now.AddDays(-90) && equip.Statut == "En service")
     { 
     <div class="alert alert-info" role="alert">
         <strong>@equip.Type</strong> @equip.Marque - @equip.NumeroSerie<br />
         Statut : @equip.Statut
-        <p>Non Affecté non affectés depuis plus de 90 jours</p>
+        <p>Non affecté depuis plus de 90 jours.</p>
     </div>
-     }
+    }
 }
+    
+

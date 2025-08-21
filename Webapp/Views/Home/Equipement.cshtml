@@ -1,9 +1,16 @@
 @model  IEnumerable<Webapp.Models.Equipment>
     @{
     ViewData["Title"] = " gerer equipement";
+    } 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    } 
+    @if (TempData["DeleteMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["DeleteMessage"]</div>
     }
-<h2>Gérer les équipements</h2>  
-        <form method="post" asp-action="ListEquip" class="mb-3">
+<h2 class="text-center">Gérer les équipements</h2>  
    <div class="container mt-5">
     <div class="card shadow-lg p-4"> 
 
@@ -31,10 +38,18 @@
                         <td>@equip.Type</td>
                         <td>@equip.Marque</td>
                         <td>@equip.Modele</td>
-                        <td>
-                            <a asp-action="EditEquip" asp-route-id="@equip.Id" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Modifier</a>
-                            <a asp-action="supprime" asp-route-id="@equip.Id" class="btn btn-danger btn-sm"onclick="return confirm('Êtes-vous sûr de vouloir Supprimer cet équipement?')"><i class="fas fa-trash"></i> Supprimer</a>  
-                            <a asp-action="DetailsEquip" asp-route-id="@equip.Id" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> Détails</a>
+                        <td> 
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="EditEquip" asp-route-id="@equip.Id" class="btn btn-light btn-sm"><i class="fas fa-edit"></i> Modifier</a>
+                                <form method="post" asp-action="supprime" asp-route-id="@equip.Id" style="display:inline-block;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-light btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir Supprimer cet équipement?')">
+                                        <i class="fas fa-trash"></i> Supprimer
+                                    </button>
+                                </form>
+                            }
+                            <a asp-action="DetailsEquip" asp-route-id="@equip.Id" class="btn btn-light btn-sm"><i class="fas fa-info-circle"></i> Détails</a>
 
                         </td>
                     </tr>
@@ -47,8 +62,11 @@
 
 
         
-    </div>
-    </div>
+   
         </tbody> 
-        </table>
-        </form> 
+        </table> 
+
+<a asp-action="index" class="btn btn-success"><i class="fas fa-arrow-left"></i> Retour </a>  
+
+    </div>
+    </div>
