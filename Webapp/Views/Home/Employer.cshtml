@@ -2,7 +2,7 @@
 @{ 
     ViewData["Title"] = "Employés"; 
 } 
-<h2>Gérer les employés</h2> 
+<h2 class="text-center">Gérer les employés</h2> 
 @if (TempData["DeleteMessage"] != null)
 {
     <div class="alert alert-success">
@@ -15,12 +15,14 @@
         @TempData["EditMessage"]
     </div>
 }
-<form method="post" asp-action="Employer" class="mb-3">
+
+
     <div class="container mt-5">
-    <div class="card shadow-lg p-4">
+    <div class="card shadow-lg p-4"> 
+@if (User.IsInRole("Admin")){
     <div class="text-end"> 
     <a asp-action="AjouterEmployer" class="btn btn-success"><i class="fas fa-plus"></i> Ajouter </a>
-    </div> 
+    </div> }
     <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -46,9 +48,17 @@
                     <td>@employe.Poste</td> 
                     
             <td> 
-               <a class="btn btn-warning btn-sm" asp-action="EditEmployer" asp-route-id="@employe.Id"><i class="fas fa-edit"></i>Modifier</a> 
-                <a class="btn btn-danger btn-sm" asp-action="DeleteEm" asp-route-id="@employe.Id" onclick="return confirm('Êtes-vous sûr de vouloir Supprimer cet employe?')"><i class="fas fa-trash"></i> Supprimer</a>
-                <a asp-action="DetailsEmployer" asp-route-id="@employe.Id" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> Détails</a>
+                @if (User.IsInRole("Admin"))
+               {
+                   <a class="btn btn-light btn-sm" asp-action="EditEmployer" asp-route-id="@employe.Id"><i class="fas fa-edit"></i>Modifier</a>  
+                      <form method="post" asp-action="DeleteEm" asp-route-id="@employe.Id" style="display:inline-block;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-light btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir Supprimer cet employe?')">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </form>
+               }
+                <a asp-action="DetailsEmployer" asp-route-id="@employe.Id" class="btn btn-light btn-sm"><i class="fas fa-info-circle"></i> Détails</a>
             </td> 
 
                 </tr>
@@ -59,7 +69,7 @@
                 <tr><td colspan="6" class="text-center">Aucun employé disponible.</td></tr>
             } 
         </tbody>
-    </table>
-</form>
+    </table> 
+    <a asp-action="index" class="btn btn-success"><i class="fas fa-arrow-left"></i> Retour </a>
 </div> 
 </div>
