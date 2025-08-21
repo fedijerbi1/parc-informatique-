@@ -20,8 +20,11 @@ namespace Webapp.Models
         public string Statut { get; set; } = "En service"; 
         public string? Description { get; set; }
 
-        public DateTime DateDerniereAffectation { get; set; } = DateTime.Now;
+        public DateTime? DateDerniereAffectation { get; set; }
 
+
+
+        // Relation avec l'employé (si assigné)
         public int? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
     }

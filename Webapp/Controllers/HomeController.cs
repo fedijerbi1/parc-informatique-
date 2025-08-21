@@ -69,13 +69,13 @@ namespace Webapp.Controllers
                 var equipment = await _context.Equipment.FindAsync(affectation.EquipmentId);
                 if (equipment != null && equipment.Statut == "En service")
                 {
-                    // Créer l'affectation
+                 
                     _context.Affectations.Add(affectation);
                     
-                    // Mettre à jour le statut de l'équipement
+            
+                    
                     equipment.EmployeeId = affectation.EmployeeId;                    
-                    equipment.DateDerniereAffectation = DateTime.Now;
-
+                    equipment.DateDerniereAffectation = DateTime.Now; 
                     await _context.SaveChangesAsync();
                     TempData["SuccessMessage"] = "Équipement affecté avec succès.";
                     return RedirectToAction("Affectation");
@@ -112,8 +112,13 @@ namespace Webapp.Controllers
                 // Remettre l'équipement en disponible
                 if (affectation.Equipment != null)
                 {
+                    affectation.Equipment.Statut = "En service";
                     affectation.Equipment.EmployeeId = null; 
-                    equip.DateDerniereAffectation = DateTime.Now; 
+                    
+                    if (equip != null)
+                    {
+                        equip.DateDerniereAffectation = DateTime.Now; // ✅ Correct : dernière fois qu'il a été retourné
+                    }
                 }
 
                 await _context.SaveChangesAsync();
