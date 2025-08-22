@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Webapp.Models; 
 using Webapp.Data;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization; 
+using Microsoft.AspNetCore.Identity;
 
 namespace Webapp.Controllers
 {
@@ -13,15 +14,25 @@ namespace Webapp.Controllers
     {
         private  ILogger<HomeController> _logger;
         private  AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context)
+        public HomeController(ILogger<HomeController> logger, AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
         [Authorize]
-        public IActionResult Index()
+            [HttpGet]
+
+        public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            ViewBag.UserName = user.FullName;
             return View();
         }
 
@@ -359,7 +370,8 @@ namespace Webapp.Controllers
             
            ViewBag.Repartition = repartition;
             return View(data);
-        }
+        } 
+
        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
