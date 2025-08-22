@@ -1,0 +1,49 @@
+@{
+    ViewData["Title"] = "Mon Profil";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-cog"></i> Mon Profil</h3>
+                </div>  
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Full Name  :</strong></label>
+                        <p class="text-muted">@ViewBag.UserFullName</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Email :</strong></label>
+                        <p class="text-muted">@ViewBag.UserEmail</p>
+                    </div> 
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Rôles :</strong></label>
+                        <p>
+                            @foreach (var role in (IList<string>)ViewBag.UserRoles)
+                            {
+                                <span class="badge bg-primary me-2">@role</span>
+                            }
+                        </p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Dernière connexion :</strong></label>
+                        <p class="text-muted">@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                            <i class="fas fa-home"></i> Retour 
+                        </a>
+                        <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-sign-out-alt"></i> Déconnexion
+                        </a>
+                    </div>
+            </div>
+        </div>
+    </div>
+  </div> 
+</div>

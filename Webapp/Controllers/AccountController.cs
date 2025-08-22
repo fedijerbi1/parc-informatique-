@@ -119,10 +119,25 @@ namespace Webapp.Controllers
         }
         public IActionResult AccessDenied()
         {
-
-
             TempData["ErrorMessage"] = "Vous n'avez pas le droit de faire ça.";
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            ViewBag.UserEmail = user.Email;
+            ViewBag.UserFullName = user.FullName;
+            ViewBag.UserRoles = userRoles;
+
+            return View();
         }
 }
 }
