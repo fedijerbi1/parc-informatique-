@@ -16,7 +16,6 @@ Ce projet permet de gérer les équipements informatiques d’une organisation a
 - **SQL Server**  
 - **Bootstrap 5** (interface)  
 - **ASP.NET Identity** (sécurité et gestion des utilisateurs)
-- **Prévenir les oublis grâce aux alertes**  
 
 ## ⚙️ Installation et exécution
 1. Cloner le dépôt :  
