@@ -1,0 +1,42 @@
+@{ 
+    ViewData["Title"] = "Historique des Équipements"; 
+} 
+
+@model IEnumerable<Webapp.Models.Affectation>  
+<h4>Historique des Affectations</h4>
+
+    <table class="table table-striped table-hover">
+        @if (Model != null && Model.Any())
+        {
+            <tr>
+                <th>Qui a utilisé</th>
+                <th>Date d'affectation</th>
+                <th>Durée</th>
+            </tr>
+        
+
+
+@foreach (var item in Model)
+{ 
+          TimeSpan difference;
+            if (item.IsActif == false && item.DateRetour != null) 
+            {
+                difference = item.DateRetour.Value - item.DateAffectation;
+            } 
+            else 
+            {
+                difference = DateTime.Now - item.DateAffectation;
+            }
+    <tr>
+        <td>@item.Employee?.Nom @item.Employee?.Prenom</td>
+        <td>@item.DateAffectation.ToString("dd/MM/yyyy")</td>
+        <td>@difference.Days jours</td>
+    </tr>
+}  
+
+} 
+else {
+    <tr><td colspan="3" class="text-center">Aucun historique d'affectation.</td></tr> 
+}
+
+</table>

@@ -89,7 +89,7 @@
                 <th class="text-dark"><i class="fas fa-tag"></i> Type</th>
                 <th class="text-dark"><i class="fas fa-industry"></i> Marque</th>
                 <th class="text-dark"><i class="fas fa-cogs"></i> Modele</th> 
-                <th class="text-dark"><i class="fas fa-calendar-alt"></i> Date de fin de garentie </th> 
+                <th class="text-dark"><i class="fas fa-calendar-alt"></i> Date de fin de garentie</th> 
                 <th class="text-dark"><i class="fas fa-shield-alt"></i> Statut garentie</th>
             </tr>
         </thead>
@@ -105,7 +105,7 @@
                             <td>@item.Type</td>
                             <td>@item.Marque</td>
                             <td>@item.Modele</td>
-                            <td>@item.DateFinGarantie</td>  
+                            <td>@(item.DateFinGarantie?.ToString("dd/MM/yyyy") ?? "non spécifiée")</td>
                             <td>@(item.DateFinGarantie > DateTime.Now ? "Valide" : "Expiré")</td>
                         </tr>
                     }
@@ -128,7 +128,7 @@
                 <th class="text-dark"><i class="fas fa-industry"></i> Marque</th>
                 <th class="text-dark"><i class="fas fa-cogs"></i> Modele</th>
                 <th class="text-dark"><i class="fas fa-calendar-alt"></i> Date de fin de garentie </th>
-                <th class="text-dark"><i class="fas fa-shield-alt"></i> Statut garentie</th>
+                <th class="text-dark"><i class="fas fa-shield-alt"></i> Statut </th>
             </tr>
         </thead>
         <tbody>
@@ -143,8 +143,8 @@
                             <td>@item.Type</td>
                             <td>@item.Marque</td>
                             <td>@item.Modele</td>
-                            <td>@item.DateFinGarantie</td>
-                            <td>@item.Statut </td>
+                            <td>@(item.DateFinGarantie?.ToString("dd/MM/yyyy") ?? "non spécifiée")</td>
+                            <td>@item.Statut</td>
                         </tr>
                     }
                 }
@@ -159,34 +159,29 @@
            
 <div class="container mt-4">
     <div class="row">
-        <!-- Graphique par Type -->
         <div class="col-md-6">
-            <h3>📊 Répartition par Type</h3>
+            <h3> Répartition par Type</h3>
             <canvas id="chartType" width="400" height="200"></canvas>
         </div>
         
-        <!-- Graphique par Statut -->
         <div class="col-md-6">
-            <h3>📈 Répartition par Statut</h3>
+            <h3> Répartition par Statut</h3>
             <canvas id="chartStatut" width="400" height="200"></canvas>
         </div>
     </div>
 </div>
 
-<!-- Inclure Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         try {
-            // Récupérer les données de répartition
             const repartition = @Html.Raw(JsonSerializer.Serialize(repartition));
             const repType = @Html.Raw(JsonSerializer.Serialize(repType));
 
             console.log("Données répartition reçues :", repartition);
             console.log("Données repType reçues :", repType);
 
-            // ========== GRAPHIQUE PAR TYPE ==========
             if (repType && repType.length > 0) {
                 new Chart(document.getElementById('chartType'), {
                     type: 'doughnut',
@@ -219,9 +214,7 @@
                 document.getElementById('chartType').style.display = 'none';
             }
 
-            // ========== GRAPHIQUE PAR STATUT ==========
             if (repartition && repartition.length > 0) {
-                // Regrouper par statut
                 const statutData = {};
                 repartition.forEach(item => {
                     const statut = item.Statut || 'Unknown';

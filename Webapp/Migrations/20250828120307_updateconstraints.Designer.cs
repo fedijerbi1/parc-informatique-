@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Webapp.Data;
 
@@ -11,9 +12,11 @@ using Webapp.Data;
 namespace Webapp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250828120307_updateconstraints")]
+    partial class updateconstraints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,14 +303,6 @@ namespace Webapp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Employee_Email");
-
-                    b.HasIndex("Telephone")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Employee_Telephone");
-
                     b.ToTable("Employees");
                 });
 
@@ -356,10 +351,6 @@ namespace Webapp.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("NumeroSerie")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Equipment_NumeroSerie");
 
                     b.ToTable("Equipment");
                 });

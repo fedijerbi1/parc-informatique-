@@ -16,7 +16,6 @@ namespace Webapp.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure Affectation relationships
             modelBuilder.Entity<Affectation>()
                 .HasOne(a => a.Employee)
                 .WithMany()
@@ -27,10 +26,24 @@ namespace Webapp.Data
                 .HasOne(a => a.Equipment)
                 .WithMany()
                 .HasForeignKey(a => a.EquipmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); 
+ modelBuilder.Entity<Equipment>()
+        .HasIndex(e => e.NumeroSerie)
+        .IsUnique()
+        .HasDatabaseName("IX_Equipment_NumeroSerie");
+        
+    modelBuilder.Entity<Employee>()
+        .HasIndex(e => e.Telephone)
+        .IsUnique()
+        .HasDatabaseName("IX_Employee_Telephone");
+        
+    modelBuilder.Entity<Employee>()
+        .HasIndex(e => e.Email)
+        .IsUnique()
+        .HasDatabaseName("IX_Employee_Email");
+        
 
-            // Configure Identity inheritance
-          
+
         }
     }
 }

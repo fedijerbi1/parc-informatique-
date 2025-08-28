@@ -12,7 +12,8 @@ namespace Webapp.Models
         public string? Marque { get; set; }
         public string? Modele { get; set; }
 
-        [Required(ErrorMessage = "Le numéro de série est obligatoire")]
+        [Required(ErrorMessage = "Le numéro de série est obligatoire")] 
+        [StringLength(50)]
         public string NumeroSerie { get; set; } = string.Empty;
 
         public DateTime? DateAchat { get; set; }
@@ -24,7 +25,6 @@ namespace Webapp.Models
 
 
 
-        // Relation avec l'employé (si assigné)
         public int? EmployeeId { get; set; }
         public Employee? Employee { get; set; }
     }

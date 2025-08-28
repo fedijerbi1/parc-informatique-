@@ -41,19 +41,16 @@
                 }
             </select>
             <span asp-validation-for="EmployeeId" class="text-danger"></span>
-        </div>
-        
-        <div class="mb-3">
-            <label asp-for="EquipmentId" class="form-label">Équipement</label>
-            <select asp-for="EquipmentId" class="form-select">
+        </div> 
+        <select asp-for="EquipmentId" class="form-select">
                 <option value="">-- Sélectionner un équipement --</option>
                 @foreach (var equip in equipment)
                 {
                     <option value="@equip.Id">@equip.NumeroSerie - @equip.Marque (@equip.Type)</option>
                 }
             </select>
-            <span asp-validation-for="EquipmentId" class="text-danger"></span>
-        </div>
+        
+        
         
         <div class="mb-3">
             <label asp-for="DateAffectation" class="form-label">Date d'affectation</label>
@@ -73,154 +70,9 @@
     </form>
 </div>}
 
-<div class="mt-4">
-    <h4>Affectations actuelles</h4>
 
-    
-    @if (affectations.Any())
-    {
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Employé</th>
-                    <th>Équipement</th>
-                    <th>Date d'affectation</th>
-                    @if(User.IsInRole("Admin")){
-                    <th>Actions</th> }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var affectation in affectations)
-                {
-                    <tr>
-                        <td>@affectation.Employee?.Prenom @affectation.Employee?.Nom</td>
-                        <td>@affectation.Equipment?.Type - @affectation.Equipment?.NumeroSerie</td>
-                        <td>@affectation.DateAffectation.ToString("dd/MM/yyyy")</td>
-                       @if(User.IsInRole("Admin")){ 
-                        <td>
-                            <form method="post" asp-action="RetournerEquipement" style="display: inline;">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="affectationId" value="@affectation.Id" />
-                                <button type="submit" class="btn btn-sm btn-warning" 
-                                        onclick="return confirm('Êtes-vous sûr de vouloir retourner cet équipement?')">
-                                    Retourner
-                                </button>
-                            </form>
-                        </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p class="text-muted">Aucune affectation active.</p>
-    }
-</div> 
 
-@{ 
-     var allEmployees = ViewBag.AllEmployees as List<Webapp.Models.Employee> ?? new List<Webapp.Models.Employee>();
-    var equipe = ViewBag.AllEquipment as List<Webapp.Models.Equipment> ?? new List<Webapp.Models.Equipment>();
-    var historique = ViewBag.AllAffectations as List<Webapp.Models.Affectation> ?? new List<Webapp.Models.Affectation>(); 
-        string chaine = ""; 
-}
 
-<h4>Historique des équipements</h4>  
-<table class="table table-striped table-hover"> 
-
-<tr> 
-<th>Numéro de série</th> 
-<th>Marque</th> 
-<th>Type</th> 
-<th>Qui a utilisé</th> 
-<th>Date d'utilisation</th> 
-<th>Durée</th> 
-</tr>   
-@foreach (var equip in equipe) 
-{
-    if (historique.Any(h => h.EquipmentId == equip.Id))
-    {
-        foreach (var item in historique.Where(h => h.EquipmentId == equip.Id)) {  
-            TimeSpan difference;
-            if (item.IsActif == false && item.DateRetour != null) 
-            {
-                difference = item.DateRetour.Value - item.DateAffectation;
-            } 
-            else 
-            {
-                difference = DateTime.Now - item.DateAffectation;
-            }
-
-            <tr>
-                <td>@item.Equipment.NumeroSerie</td>
-                <td>@item.Equipment.Marque</td>
-                <td>@item.Equipment.Type</td>
-               <td>@item.Employee?.Prenom @item.Employee?.Nom</td>
-                <td>@item.DateAffectation.ToString("dd/MM/yyyy")</td> 
-                <td>@difference.Days jours</td> 
-              </tr>} 
-              } 
-    else { 
-        <tr>
-            <td>@equip.NumeroSerie</td>
-            <td>@equip.Marque</td>
-            <td>@equip.Type</td>
-            <td>Aucun utilisateur</td>
-            <td>Aucune date</td>
-            <td>0 jours</td>
-        </tr>
-    }}
-</table>
-<h4>Historique des employés</h4>
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Département</th>
-            <th>Poste</th>
-            <th>Équipements utilisés</th> 
-        </tr>
-    </thead>
-    <tbody>
-        @if (allEmployees.Any())
-        {
-        foreach (var employee in allEmployees)
-        { chaine = ""; 
-              var equipementsEmployee = historique.Where(h => h.EmployeeId == employee.Id).ToList();
-        
-        if (equipementsEmployee.Any())
-        {
-            // Créer la liste des équipements utilisés
-            var equipementsList = equipementsEmployee
-                .Select(item => $"{item.Equipment?.NumeroSerie} ({item.Equipment?.Marque}, {item.Equipment?.Type})")
-                .Where(s => !string.IsNullOrEmpty(s))
-                .Distinct() // Éviter les doublons
-                .ToList();
-            
-            chaine = string.Join(" | ", equipementsList);
-        }
-        else
-        {
-            chaine = "Aucun équipement utilisé";
-        }
-    
-
-                <tr>
-                    <td>@employee.Nom</td>
-                    <td>@employee.Prenom</td>
-                    <td>@employee.Departement</td>
-                    <td>@employee.Poste</td> 
-                    <td>@chaine</td> 
-                </tr>
-        }
-        }
-        else
-        {
-            <tr><td colspan="5" class="text-center">Aucun employé disponible.</td></tr>
-        }
-    </tbody>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

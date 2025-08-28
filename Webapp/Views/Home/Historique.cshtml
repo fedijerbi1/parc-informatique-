@@ -1,0 +1,26 @@
+@{ 
+    ViewData["Title"] = "Historique des Employés"; 
+}
+@model IEnumerable<Webapp.Models.Affectation>  
+<h4>Historique des Affectations</h4>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped table-hover"> 
+        
+        <th>Équipement</th>
+        <th>Date d'Affectation</th>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td>@item.Equipment?.Type - @item.Equipment?.NumeroSerie</td>
+        <td>@item.DateAffectation.ToString("dd/MM/yyyy")</td>
+    </tr> 
+    }
+    
+    </table>
+}
+else
+{
+    <tr><td colspan="2" class="text-center">Aucun historique d'affectation.</td></tr> 
+} 
