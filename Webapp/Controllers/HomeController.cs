@@ -56,14 +56,25 @@ namespace Webapp.Controllers
         {
             await LoadAllDataToViewBag();
             ViewBag.Employees = await _context.Employees.Where(e => e.IsActif).ToListAsync();
-            ViewBag.Equipment = await _context.Equipment.Where(e => e.Statut == "En service").ToListAsync();
-
+            
             var affectations = await _context.Affectations
                 .Where(a => a.IsActif)
                 .Include(a => a.Employee)
                 .Include(a => a.Equipment)
                 .OrderByDescending(a => a.DateAffectation)
                 .ToListAsync();
+            
+            // ✅ Puis extraire les IDs des équipements affectés (seulement les affectations actives)
+            var equipmentIdsAffected = affectations
+                .Where(a => a.IsActif == true)
+                .Select(a => a.EquipmentId)
+                .ToList();
+
+            // ✅ Enfin filtrer les équipements non affectés
+            ViewBag.Equipment = await _context.Equipment
+                .Where(e => e.Statut == "En service" && !equipmentIdsAffected.Contains(e.Id))
+                .ToListAsync();
+
             ViewBag.Affectations = affectations;
 
             return View(new Affectation());
@@ -102,19 +113,7 @@ namespace Webapp.Controllers
             await LoadAllDataToViewBag();
            
             return View(affectation);
-        } 
-
-        public async Task<IActionResult> AffectationActuelles()
-        { 
-            ViewBag.Affectations = await _context.Affectations
-                .Include(a => a.Employee)
-                .Include(a => a.Equipment)
-                .Where(a => a.IsActif)
-                .ToListAsync();
-
-            return View(ViewBag.Affectations);
         }
-
 
         [HttpPost] 
         [Authorize(Roles = "Admin")]
@@ -128,9 +127,11 @@ namespace Webapp.Controllers
 
             if (affectation != null)
             {
+                // Marquer l'affectation comme inactive
                 affectation.IsActif = false;
                 affectation.DateRetour = DateTime.Now;
 
+                // Remettre l'équipement en disponible
                 if (affectation.Equipment != null)
                 {
                     affectation.Equipment.Statut = "En service";
@@ -151,6 +152,18 @@ namespace Webapp.Controllers
             }
 
             return RedirectToAction("Affectation");
+        }
+        public async Task<IActionResult> AffectationActuelles()
+        {  
+            var affectations = await _context.Affectations
+                .Where(a => a.IsActif)
+                .Include(a => a.Employee)
+                .Include(a => a.Equipment)
+                .OrderByDescending(a => a.DateAffectation)
+                .ToListAsync(); 
+            ViewBag.Affectations = affectations;
+
+            return View(affectations);
         }
         [Authorize]
         public IActionResult Composants()
@@ -271,6 +284,7 @@ namespace Webapp.Controllers
 
                 _context.Equipment.Remove(e);
                 await _context.SaveChangesAsync();
+                TempData["DeleteMessage"] = $"Équipement '{e.Type}' supprimé avec succès.";
                 return RedirectToAction("Equipement");
             } 
             
@@ -384,26 +398,25 @@ namespace Webapp.Controllers
             
            ViewBag.Repartition = repartition;
             return View(data);
-        }
+        }  
 
-public async Task<IActionResult> Historique(int id)
-{
-    var employe = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
-    if (employe == null)
-    {
-        return NotFound();
-    }
+        public async Task<IActionResult> Historique(int id )
+        { 
+            var employe = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
+            if (employe == null)
+            {
+                return NotFound();
+            }
 
-    var historique = await _context.Affectations
-        .Where(a => a.EmployeeId == id)
-        .Include(a => a.Equipment)
-        .OrderByDescending(a => a.DateAffectation)
-        .ToListAsync();
+            var historique = await _context.Affectations
+                .Include(h => h.Equipment)
+                .Where(h => h.EmployeeId == id)
+                .ToListAsync();
 
-    return View(historique);
-}
-        public async Task<IActionResult> HistoriqueEquipement(int id)
-        {
+            return View(historique);
+        } 
+        public async Task<IActionResult> HistoriqueEquipement(int id )
+        { 
             var equipement = await _context.Equipment.FirstOrDefaultAsync(e => e.Id == id);
             if (equipement == null)
             {
@@ -411,15 +424,12 @@ public async Task<IActionResult> Historique(int id)
             }
 
             var historique = await _context.Affectations
-                .Where(a => a.EquipmentId == id)
-                .Include(a => a.Employee)
-                .OrderByDescending(a => a.DateAffectation)
+                .Include(h => h.Employee)
+                .Where(h => h.EquipmentId == id)
                 .ToListAsync();
 
             return View(historique);
-        } 
-  
-
+        }
 
 
 
