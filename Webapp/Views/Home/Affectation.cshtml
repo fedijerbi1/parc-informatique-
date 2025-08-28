@@ -1,3 +1,5 @@
+
+
 @model Webapp.Models.Affectation 
 @{
     ViewData["Title"] = "Affectation";
@@ -41,16 +43,19 @@
                 }
             </select>
             <span asp-validation-for="EmployeeId" class="text-danger"></span>
-        </div> 
-        <select asp-for="EquipmentId" class="form-select">
+        </div>
+        
+        <div class="mb-3">
+            <label asp-for="EquipmentId" class="form-label">Équipement</label>
+            <select asp-for="EquipmentId" class="form-select">
                 <option value="">-- Sélectionner un équipement --</option>
                 @foreach (var equip in equipment)
                 {
                     <option value="@equip.Id">@equip.NumeroSerie - @equip.Marque (@equip.Type)</option>
                 }
             </select>
-        
-        
+            <span asp-validation-for="EquipmentId" class="text-danger"></span>
+        </div>
         
         <div class="mb-3">
             <label asp-for="DateAffectation" class="form-label">Date d'affectation</label>
@@ -69,7 +74,6 @@
         </div>
     </form>
 </div>}
-
 
 
 
