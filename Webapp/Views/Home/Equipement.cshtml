@@ -11,16 +11,19 @@
         <div class="alert alert-success">@TempData["DeleteMessage"]</div>
     }
     @Html.AntiForgeryToken()
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
 <h2 class="text-center">Gérer les équipements</h2>  
    <div class="container mt-5">
     <div class="card shadow-lg p-4"> 
-@if (User.IsInRole("Admin")){
+@if (User.IsInRole("Admin")){ 
+    <div style="margin-bottom: 20px;">
         <div class="text-end">
             <a class="btn btn-success" asp-action="AjouterEquip"><i class="fas fa-plus"></i> Ajouter</a>
-        </div> }
-     
-            <table class="table table-striped table-hover">
+        </div>
+    </div>
+}
+            <table class="table table-striped table-hover" id="EquipementTable">
                 <thead>
                     <tr>
                 <th>Numéro de Série Unique</th>
@@ -65,12 +68,19 @@
    
         </tbody> 
         </table> 
-
+<div style="margin-top: 10px;">
 <a asp-action="index" class="btn btn-success"><i class="fas fa-arrow-left"></i> Retour </a>  
+</div> 
 
     </div>
     </div> 
- @section Scripts {
+ @section Scripts { 
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#EquipementTable').DataTable();
+        });
+    </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() { 
     if (typeof Swal === 'undefined') {
