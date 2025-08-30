@@ -3,9 +3,13 @@
     var affectations = ViewBag.Affectations as List<Webapp.Models.Affectation> ?? new List<Webapp.Models.Affectation>();
 }  
 
-<div class="mt-4">
-    <h4>Affectations actuelles</h4>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
+<div class="mt-4">
+    <h4>Affectations actuelles</h4> 
+
+   <div class="container mt-5">
+    <div class="card shadow-lg p-4"> 
     @if (affectations.Any())
     {
         <table id="affectationsTable" class="table table-striped">
@@ -46,27 +50,19 @@
     {
         <p class="text-muted">Aucune affectation active.</p>
     }
+    <div style="margin-top: 10px;">
+    <a asp-action="Affectation" class="btn btn-success"><i class="fas fa-arrow-left"></i> Retour</a>
+    </div>
 </div>  
 
+</div>  
+</div>
+
 @section Scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#affectationsTable').DataTable({
-                "language": {
-                    "lengthMenu": "Afficher _MENU_ entrées",
-                    "zeroRecords": "Aucun résultat trouvé",
-                    "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
-                    "infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
-                    "infoFiltered": "(filtré de _MAX_ entrées au total)",
-                    "search": "Rechercher:",
-                    "paginate": {
-                        "first": "Premier",
-                        "last": "Dernier",
-                        "next": "Suivant",
-                        "previous": "Précédent"
-                    }
-                }
-            });
+            $('#affectationsTable').DataTable();
         });
     </script>
 }
