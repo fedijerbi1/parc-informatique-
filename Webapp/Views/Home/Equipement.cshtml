@@ -6,15 +6,21 @@
     {
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-               showSuccessMessage("Équipement ajouté!", "@TempData["SuccessMessage"]",3000);
+                var message = @Html.Raw(Json.Serialize(TempData["SuccessMessage"]));
+                showSuccessMessage("Équipement ajouté!", message, 3000);
+            });
+        </script>
+    }
+    @if (TempData["EditMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var message = @Html.Raw(Json.Serialize(TempData["EditMessage"]));
+                showSuccessMessage("Équipement modifié!", message, 3000);
             });
         </script>
     }
 
-    @if (TempData["DeleteMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["DeleteMessage"]</div>
-    }
     @Html.AntiForgeryToken()
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 

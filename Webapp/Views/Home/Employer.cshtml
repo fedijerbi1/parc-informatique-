@@ -15,9 +15,13 @@
 }
 @if (TempData["EditMessage"] != null)
 {
-    <div class="alert alert-success">
-        @TempData["EditMessage"]
-    </div>
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            var message = @Html.Raw(Json.Serialize(TempData["EditMessage"]));
+
+               showSuccessMessage("Équipement modifié!", message,3000);
+            });
+        </script>
 }
 
 

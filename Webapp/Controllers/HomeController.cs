@@ -149,11 +149,9 @@ namespace Webapp.Controllers
             {
                 var equip = await _context.Equipment.FirstOrDefaultAsync(e => e.Id == affectation.EquipmentId);
                 
-                // Marquer l'affectation comme inactive
                 affectation.IsActif = false;
                 affectation.DateRetour = DateTime.Now;
 
-                // Remettre l'équipement en disponible
                 if (affectation.Equipment != null)
                 {
                     affectation.Equipment.EmployeeId = null; 
@@ -266,7 +264,7 @@ namespace Webapp.Controllers
 
             _context.Equipment.Update(equipe);
             await _context.SaveChangesAsync(); 
-                            TempData["SuccessMessage"] = "Équipement modifié avec succès.";
+            TempData["EditMessage"] = "Équipement modifié avec succès.";
 
             return RedirectToAction("Equipement");
         }  

@@ -7,17 +7,22 @@
     var equipment = ViewBag.Equipment as List<Webapp.Models.Equipment> ?? new List<Webapp.Models.Equipment>();
      var affectations = ViewBag.Affectations as List<Webapp.Models.Affectation> ?? new List<Webapp.Models.Affectation>();
 
-} 
+}  
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
 
 <h2 class="text-center">Affectation d'un Équipement</h2>
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
+     <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            var message = @Html.Raw(Json.Serialize(TempData["SuccessMessage"]));
+
+               showSuccessMessage("Équipement(s) affecté(s)", message,3000);
+            });
+        </script>
+
+    
 }
 
 @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage as string))
