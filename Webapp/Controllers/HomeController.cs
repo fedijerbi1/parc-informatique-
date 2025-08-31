@@ -83,36 +83,57 @@ namespace Webapp.Controllers
         [HttpPost] 
         [Authorize(Roles = "Admin")] 
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Affectation(Affectation affectation)
-        {
-            if (ModelState.IsValid)
+        public async Task<IActionResult> Affectation(Affectation model, List<int> EquipmentIds)
+        { 
+            if (ModelState.IsValid && EquipmentIds != null && EquipmentIds.Any())
             {
-                // Vérifier que l'équipement est disponible
-                var equipment = await _context.Equipment.FindAsync(affectation.EquipmentId);
-                if (equipment != null && equipment.Statut == "En service")
+                int affectationsCreated = 0;
+                
+                foreach (int equipmentId in EquipmentIds)
                 {
-                 
-                    _context.Affectations.Add(affectation);
-                    
-            
-                    
-                    equipment.EmployeeId = affectation.EmployeeId;                    
-                    equipment.DateDerniereAffectation = DateTime.Now; 
+                    var equipment = await _context.Equipment.FindAsync(equipmentId);
+                    if (equipment != null && equipment.Statut == "En service" && equipment.EmployeeId == null)
+                    {
+                        var affectation = new Affectation
+                        {
+                            EmployeeId = model.EmployeeId,
+                            EquipmentId = equipmentId,
+                            DateAffectation = DateTime.Now,
+                            IsActif = true
+                        };
+
+                        _context.Affectations.Add(affectation);
+                        
+                        equipment.EmployeeId = model.EmployeeId;
+                        equipment.DateDerniereAffectation = DateTime.Now;
+                        
+                        affectationsCreated++;
+                    }
+                }
+
+                if (affectationsCreated > 0)
+                {
                     await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Équipement affecté avec succès.";
+                    TempData["SuccessMessage"] = $"{affectationsCreated} équipement(s) affecté(s) avec succès.";
                     return RedirectToAction("Affectation");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "L'équipement sélectionné n'est pas disponible.");
+                    ModelState.AddModelError("", "Aucun équipement sélectionné n'est disponible pour l'affectation.");
                 }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Veuillez sélectionner au moins un équipement et un employé.");
             }
 
             ViewBag.Employees = await _context.Employees.Where(e => e.IsActif).ToListAsync();
-            ViewBag.Equipment = await _context.Equipment.Where(e => e.Statut == "En service").ToListAsync(); 
+            ViewBag.Equipment = await _context.Equipment
+                .Where(e => e.Statut == "En service" && e.EmployeeId == null)
+                .ToListAsync(); 
             await LoadAllDataToViewBag();
            
-            return View(affectation);
+            return View(model);
         }
 
         [HttpPost] 
@@ -122,11 +143,12 @@ namespace Webapp.Controllers
         {
             var affectation = await _context.Affectations
                 .Include(a => a.Equipment)
-                .FirstOrDefaultAsync(a => a.Id == affectationId && a.IsActif); 
-            var equip = await _context.Equipment.FirstOrDefaultAsync(e => e.Id == affectation.EquipmentId);
+                .FirstOrDefaultAsync(a => a.Id == affectationId && a.IsActif);
 
             if (affectation != null)
             {
+                var equip = await _context.Equipment.FirstOrDefaultAsync(e => e.Id == affectation.EquipmentId);
+                
                 // Marquer l'affectation comme inactive
                 affectation.IsActif = false;
                 affectation.DateRetour = DateTime.Now;
