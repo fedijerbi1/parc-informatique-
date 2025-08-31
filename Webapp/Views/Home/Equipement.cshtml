@@ -4,8 +4,13 @@
     } 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    } 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+               showSuccessMessage("Équipement ajouté!", "@TempData["SuccessMessage"]",3000);
+            });
+        </script>
+    }
+
     @if (TempData["DeleteMessage"] != null)
     {
         <div class="alert alert-success">@TempData["DeleteMessage"]</div>

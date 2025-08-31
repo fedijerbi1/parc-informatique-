@@ -134,12 +134,11 @@ namespace Webapp.Controllers
                 // Remettre l'équipement en disponible
                 if (affectation.Equipment != null)
                 {
-                    affectation.Equipment.Statut = "En service";
                     affectation.Equipment.EmployeeId = null; 
                     
                     if (equip != null)
                     {
-                        equip.DateDerniereAffectation = DateTime.Now; // ✅ Correct : dernière fois qu'il a été retourné
+                        equip.DateDerniereAffectation = DateTime.Now; 
                     }
                 }
 
@@ -195,7 +194,7 @@ namespace Webapp.Controllers
             {
                 _context.Equipment.Add(equipe);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Équipement ajouté avec succès.";
+                TempData["SuccessMessage"] = "equipement ajoute.";
                 return RedirectToAction("Equipement");
             }
 

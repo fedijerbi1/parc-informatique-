@@ -6,3 +6,29 @@ $(document).ready(function () {
     // Initialiser DataTable pour les tableaux avec l'id equipementsTable
     $('#equipementsTable').DataTable();
 });
+
+
+function showSuccessMessage(title = "Succès!", message = "Opération réussie!", timer = 3000) {
+    Swal.fire({
+        title: title,
+        text: message,
+        icon: "success",
+        timer: timer,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end'
+    });
+}
+
+
+function showErrorMessage(title = "Erreur!", message = "Une erreur est survenue!", timer = 5000) {
+    Swal.fire({
+        title: title,
+        text: message,
+        icon: "error",
+        timer: timer,
+        showConfirmButton: true,
+        toast: true,
+        position: 'top-end'
+    });
+}
