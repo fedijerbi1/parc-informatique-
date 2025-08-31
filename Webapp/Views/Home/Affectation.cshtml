@@ -41,7 +41,7 @@
         @Html.AntiForgeryToken()
         
         <div class="mb-3">
-            <label asp-for="EmployeeId" class="form-label">Employé</label>
+            <h4><label asp-for="EmployeeId" class="form-label">Employé</label></h4>
 
             <table class="table table-striped table-hover" id="affectationsActuellesTable">
                 <thead>
@@ -67,12 +67,9 @@
         </div>
         
         <div class="mb-3">
-            <label asp-for="EquipmentId" class="form-label">Équipement</label>
-                                <table class="table table-striped table-hover" id="affectationsActuellesTable">
-
-
-                     <table class="table table-striped table-hover" id="affectationsATable">
-                        <thead>
+            <h4><label asp-for="EquipmentId" class="form-label">Équipement</label></h4>
+            <table class="table table-striped table-hover" id="affectationsATable">
+                <thead>
                         <tr>
                             <th>Numero de serie unique</th> 
                             <th>Type</th> 
@@ -98,13 +95,13 @@
         </div>
         
         <div class="mb-3">
-            <label asp-for="DateAffectation" class="form-label">Date d'affectation</label>
+           <h4><label asp-for="DateAffectation" class="form-label">Date d'affectation</label></h4>
             <input asp-for="DateAffectation" type="date" class="form-control" />
             <span asp-validation-for="DateAffectation" class="text-danger"></span>
         </div>
         
         <div class="mb-3">
-            <label asp-for="Commentaires" class="form-label">Commentaires (optionnel)</label>
+          <h4><label asp-for="Commentaires" class="form-label">Commentaires (optionnel)</label></h4>
             <textarea asp-for="Commentaires" class="form-control" rows="3" placeholder="Commentaires ou notes sur cette affectation..."></textarea>
         </div>
         

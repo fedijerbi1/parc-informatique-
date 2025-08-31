@@ -385,6 +385,12 @@ namespace Webapp.Controllers
             {
                 return NotFound();
             }
+            var affectations = await _context.Affectations.Include(a => a.Employee)
+                .FirstOrDefaultAsync(a => a.EquipmentId == id && a.IsActif == true)
+                ;
+
+
+            ViewBag.Affectations = affectations;
             return View(equipement);
         } 
         public async Task<IActionResult> Dashboard()

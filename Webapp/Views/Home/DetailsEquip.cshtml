@@ -29,6 +29,10 @@
             <dt class="col-sm-3">Date de fin de garantie</dt>
             <dd class="col-sm-9">
                 @(Model.DateFinGarantie?.ToString("dd/MM/yyyy") ?? "non specifiee")
+            </dd>  
+            <dt class="col-sm-3">Affecté à</dt>
+            <dd class="col-sm-9">
+                @(ViewBag.Affectations.Employee?.Prenom + " " + ViewBag.Affectations.Employee?.Nom ?? "Non affecté")
             </dd>
 
             <dt class="col-sm-3">Statut</dt>
@@ -36,9 +40,9 @@
                 <span class="text-dark">
                   @Model.Statut 
                 </span>
-            </dd>  
+            </dd>   
              <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9">@Model.Description</dd> 
+            <dd class="col-sm-9">@(Model.Description??"Aucune Description")</dd>
 
         
         </dl>

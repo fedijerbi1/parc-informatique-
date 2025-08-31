@@ -13,7 +13,8 @@
                 <thead>
                     <tr>
                         <th>Équipement</th>
-                        <th>Date d'Affectation</th>
+                        <th>Date d'Affectation</th> 
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,7 +22,8 @@
                     {
                         <tr>
                             <td>@item.Equipment?.Type - @item.Equipment?.NumeroSerie</td>
-                            <td>@item.DateAffectation.ToString("dd/MM/yyyy")</td>
+                            <td>@item.DateAffectation.ToString("dd/MM/yyyy")</td> 
+                            <td><a asp-action="DetailsEquip" asp-controller="Home" asp-route-id="@item.Equipment?.Id" class="btn btn-info btn-sm">Détails</a></td>
                         </tr> 
                     }
                 </tbody>
