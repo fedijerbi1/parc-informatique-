@@ -454,9 +454,20 @@ namespace Webapp.Controllers
                 .ToListAsync();
 
             return View(historique);
+        } 
+
+        public async Task<IActionResult> detailsaffectation(int id)
+        {
+            var affectation = await _context.Affectations
+                .Include(a => a.Employee)
+                .Include(a => a.Equipment)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            if (affectation == null)
+            {
+                return NotFound();
+            }
+            return View(affectation);
         }
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
