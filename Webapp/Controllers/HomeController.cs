@@ -64,13 +64,11 @@ namespace Webapp.Controllers
                 .OrderByDescending(a => a.DateAffectation)
                 .ToListAsync();
             
-            // ✅ Puis extraire les IDs des équipements affectés (seulement les affectations actives)
             var equipmentIdsAffected = affectations
                 .Where(a => a.IsActif == true)
                 .Select(a => a.EquipmentId)
                 .ToList();
 
-            // ✅ Enfin filtrer les équipements non affectés
             ViewBag.Equipment = await _context.Equipment
                 .Where(e => e.Statut == "En service" && !equipmentIdsAffected.Contains(e.Id))
                 .ToListAsync();
