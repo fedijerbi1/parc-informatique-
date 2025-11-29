@@ -7,17 +7,19 @@ using Webapp.Models;
 using Webapp.Data;
 using Microsoft.AspNetCore.Authorization; 
 using Microsoft.AspNetCore.Identity;
-
+using Webapp.Services; 
 namespace Webapp.Controllers
 {
     public class HomeController : Controller
     {
         private  ILogger<HomeController> _logger;
         private  AppDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager; 
+        private readonly EmployeePdfService _pdf;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context, UserManager<ApplicationUser> userManager)
-        {
+        public HomeController(ILogger<HomeController> logger, AppDbContext context, UserManager<ApplicationUser> userManager,EmployeePdfService pdf)
+        { 
+            _pdf=pdf;
             _logger = logger;
             _context = context;
             _userManager = userManager;
@@ -169,6 +171,18 @@ namespace Webapp.Controllers
             }
 
             return RedirectToAction("Affectation");
+        } 
+        [HttpGet] 
+        public async Task<IActionResult> Imprimer (int id ){ 
+            var imprimer = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);     
+            if (imprimer != null) { 
+                 var pdfBytes = _pdf.GeneratePdf(imprimer); 
+                    return File(pdfBytes, "application/pdf", $"Employee_{imprimer.Nom}_Details.pdf"); 
+            } 
+            else {
+                return NotFound();
+            }
+
         }
         public async Task<IActionResult> AffectationActuelles()
         {  
