@@ -16,9 +16,11 @@ namespace Webapp.Controllers
         private  AppDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager; 
         private readonly EmployeePdfService _pdf;
+        private readonly EquipementPdfService _equipementPdf;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context, UserManager<ApplicationUser> userManager,EmployeePdfService pdf)
+        public HomeController(ILogger<HomeController> logger, AppDbContext context, UserManager<ApplicationUser> userManager,EmployeePdfService pdf,EquipementPdfService eq)
         { 
+            _equipementPdf = eq;
             _pdf=pdf;
             _logger = logger;
             _context = context;
@@ -324,7 +326,7 @@ namespace Webapp.Controllers
 
             
 
-        }
+        } 
         [HttpGet]
         [Authorize(Roles = "Admin")] 
         public async Task<IActionResult> EditEmployer(int id)
@@ -374,7 +376,19 @@ namespace Webapp.Controllers
         }
 
 
+ public async Task<IActionResult> ImprimerEq (int id)
+        {
 
+            var equipement = await _context.Equipment.FirstOrDefaultAsync(e => e.Id == id);
+            if (equipement == null)
+            {
+                return NotFound();
+            }
+            else {
+                 var pdfBytes =  _equipementPdf.Generatepdf(equipement); 
+                    return File(pdfBytes, "application/pdf", $"Equipement_{equipement.Type}_Details.pdf"); 
+            }
+        }
 
 
         public async Task<IActionResult> DetailsEmployer(int id)

@@ -58,5 +58,50 @@ namespace Webapp.Services
 
         return document.GeneratePdf();
     }
-} 
+}
+  public class EquipementPdfService
+    {
+        public EquipementPdfService()
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+        } 
+        public byte [] Generatepdf (Equipment e) { 
+            var document = Document.Create(container => 
+            { 
+                container.Page(page => 
+                { 
+                    page.Size (PageSizes.A4); 
+                    page.Margin(20); 
+                    page.PageColor(Colors.White); 
+                    page.DefaultTextStyle(x => x.FontSize(12));
+                    page.Header() 
+                        .Text($"{e.Type} Details") 
+                        .FontSize(20) 
+                        .Bold() 
+                        .AlignCenter(); 
+                    page.Content()
+                        .Column(column => { 
+                            column.Item().Text($" {e.Type}") ; 
+                            column.Item().Text($" {e.Marque}") ; 
+                            column.Item().Text($" {e.Modele}") ; 
+                            column.Item().Text($" {e.NumeroSerie}") ; 
+                            column.Item().Text($" {e.Statut}") ;  
+                            column.Item().Text($" {e.Description}") ; 
+
+
+                        }); 
+                page.Footer()
+                    .AlignCenter()
+                    .Text(x =>
+                    {
+                        x.Span("Generated on ");
+                        x.Span(DateTime.Now.ToString("MM/dd/yyyy")).Bold();
+                    });
+            });
+                    
+                    
+        }); 
+            return document.GeneratePdf(); 
+        } 
+        } 
 }
