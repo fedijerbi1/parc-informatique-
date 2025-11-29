@@ -24,19 +24,26 @@ namespace Webapp.Services
                 page.DefaultTextStyle(x => x.FontSize(12));
 
                 page.Header()
-                    .Text("Employee Details")
+                    .Text($"{e.Nom} {e.Prenom} Details")
                     .FontSize(20)
                     .Bold()
-                    .AlignCenter();
+                    .AlignCenter() ;
+                
+                    
 
-                page.Content()
+                page.Content() 
+                
                     .PaddingVertical(15)
+
                     .Column(column =>
                     {
                         column.Item().Text($"Name: {e.Nom}");
                         column.Item().Text($"Position: {e.Prenom}");
-                        column.Item().Text($"Department: {e.Poste}");
+                        column.Item().Text($"Poste:{e.Poste}") ;
                         column.Item().Text($"Email: {e.Email}");
+                        column.Item().Text($"Phone: {e.Telephone}");
+                        column.Item().Text($"Departement : {e.Departement}");
+                        column.Item().Text($"Hire Date : {e.DateEmbauche.ToString("MM/dd/yyyy")}");
                     });
 
                 page.Footer()
