@@ -13,95 +13,142 @@ namespace Webapp.Services
         }
 
         public byte[] GeneratePdf(Employee e)
-    {
-        var document = Document.Create(container =>
         {
-            container.Page(page =>
+            var document = Document.Create(container =>
             {
-                page.Size(PageSizes.A4);
-                page.Margin(20);
-                page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(12));
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(40);
+                    page.DefaultTextStyle(x => x.FontSize(11));
 
-                page.Header()
-                    .Text($"{e.Nom} {e.Prenom} Details")
-                    .FontSize(20)
-                    .Bold()
-                    .AlignCenter() ;
-                
-                    
-
-                page.Content() 
-                
-                    .PaddingVertical(15)
-
-                    .Column(column =>
+                    // En-tête avec bordure
+                    page.Header().Column(col =>
                     {
-                        column.Item().Text($"Name: {e.Nom}");
-                        column.Item().Text($"Position: {e.Prenom}");
-                        column.Item().Text($"Poste:{e.Poste}") ;
-                        column.Item().Text($"Email: {e.Email}");
-                        column.Item().Text($"Phone: {e.Telephone}");
-                        column.Item().Text($"Departement : {e.Departement}");
-                        column.Item().Text($"Hire Date : {e.DateEmbauche.ToString("MM/dd/yyyy")}");
+                        col.Item().Background(Colors.Blue.Medium).Padding(15).Text($"Fiche Employé")
+                            .FontSize(22).Bold().FontColor(Colors.White).AlignCenter();
+                        col.Item().PaddingTop(10).Text($"{e.Nom} {e.Prenom}")
+                            .FontSize(18).SemiBold().FontColor(Colors.Blue.Darken2).AlignCenter();
+                        col.Item().PaddingTop(5).LineHorizontal(2).LineColor(Colors.Blue.Medium);
                     });
 
-                page.Footer()
-                    .AlignCenter()
-                    .Text(x =>
+                    // Contenu en tableau
+                    page.Content().PaddingVertical(20).Table(table =>
                     {
-                        x.Span("Generated on ");
-                        x.Span(DateTime.Now.ToString("MM/dd/yyyy")).Bold();
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.ConstantColumn(150);
+                            columns.RelativeColumn();
+                        });
+
+                        void AddRow(string label, string value, bool withLine = true)
+                        {
+                            table.Cell().Background(Colors.Grey.Lighten3).Padding(10)
+                                .Text(label).SemiBold().FontSize(12);
+                            table.Cell().Padding(10).Text(value).FontSize(12);
+                            
+                            if (withLine)
+                            {
+                                table.Cell().ColumnSpan(2).PaddingVertical(2)
+                                    .LineHorizontal(0.5f).LineColor(Colors.Grey.Lighten1);
+                            }
+                        }
+
+                        AddRow("Nom", e.Nom);
+                        AddRow("Prénom", e.Prenom);
+                        AddRow("Poste", e.Poste);
+                        AddRow("Email", e.Email);
+                        AddRow("Téléphone", e.Telephone ?? "N/A");
+                        AddRow("Département", e.Departement ?? "N/A");
+                        AddRow("Date d'embauche", e.DateEmbauche.ToString("dd/MM/yyyy"));
+                        AddRow("Statut", e.IsActif ? "Actif" : "Inactif", false);
                     });
+
+                    // Pied de page
+                    page.Footer().AlignCenter().Text(x =>
+                    {
+                        x.Span("Document généré le ");
+                        x.Span(DateTime.Now.ToString("dd/MM/yyyy à HH:mm")).Bold();
+                        x.Span(" | Page ");
+                        x.CurrentPageNumber();
+                    });
+                });
             });
-        });
 
-        return document.GeneratePdf();
+            return document.GeneratePdf();
+        }
     }
-}
-  public class EquipementPdfService
+
+    public class EquipementPdfService
     {
         public EquipementPdfService()
         {
             QuestPDF.Settings.License = LicenseType.Community;
-        } 
-        public byte [] Generatepdf (Equipment e) { 
-            var document = Document.Create(container => 
-            { 
-                container.Page(page => 
-                { 
-                    page.Size (PageSizes.A4); 
-                    page.Margin(20); 
-                    page.PageColor(Colors.White); 
-                    page.DefaultTextStyle(x => x.FontSize(12));
-                    page.Header() 
-                        .Text($"{e.Type} Details") 
-                        .FontSize(20) 
-                        .Bold() 
-                        .AlignCenter(); 
-                    page.Content()
-                        .Column(column => { 
-                            column.Item().Text($" {e.Type}") ; 
-                            column.Item().Text($" {e.Marque}") ; 
-                            column.Item().Text($" {e.Modele}") ; 
-                            column.Item().Text($" {e.NumeroSerie}") ; 
-                            column.Item().Text($" {e.Statut}") ;  
-                            column.Item().Text($" {e.Description}") ; 
+        }
 
+        public byte[] Generatepdf(Equipment e)
+        {
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(40);
+                    page.DefaultTextStyle(x => x.FontSize(11));
 
-                        }); 
-                page.Footer()
-                    .AlignCenter()
-                    .Text(x =>
+                    // En-tête avec bordure
+                    page.Header().Column(col =>
                     {
-                        x.Span("Generated on ");
-                        x.Span(DateTime.Now.ToString("MM/dd/yyyy")).Bold();
+                        col.Item().Background(Colors.Green.Medium).Padding(15).Text($"Fiche Équipement")
+                            .FontSize(22).Bold().FontColor(Colors.White).AlignCenter();
+                        col.Item().PaddingTop(10).Text($"{e.Type} - {e.Marque}")
+                            .FontSize(18).SemiBold().FontColor(Colors.Green.Darken2).AlignCenter();
+                        col.Item().PaddingTop(5).LineHorizontal(2).LineColor(Colors.Green.Medium);
                     });
+
+                    // Contenu en tableau
+                    page.Content().PaddingVertical(20).Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.ConstantColumn(150);
+                            columns.RelativeColumn();
+                        });
+
+                        void AddRow(string label, string value, bool withLine = true)
+                        {
+                            table.Cell().Background(Colors.Grey.Lighten3).Padding(10)
+                                .Text(label).SemiBold().FontSize(12);
+                            table.Cell().Padding(10).Text(value).FontSize(12);
+                            
+                            if (withLine)
+                            {
+                                table.Cell().ColumnSpan(2).PaddingVertical(2)
+                                    .LineHorizontal(0.5f).LineColor(Colors.Grey.Lighten1);
+                            }
+                        }
+
+                        AddRow("Type", e.Type);
+                        AddRow("Marque", e.Marque);
+                        AddRow("Modèle", e.Modele ?? "N/A");
+                        AddRow("Numéro de série", e.NumeroSerie ?? "N/A");
+                        AddRow("Statut", e.Statut);
+                        AddRow("Date d'achat", e.DateAchat == null ? "N/A" : e.DateAchat.Value.ToString("dd/MM/yyyy"));
+                        AddRow("Description", e.Description ?? "N/A", false);
+                    });
+
+                    // Pied de page
+                    page.Footer().AlignCenter().Text(x =>
+                    {
+                        x.Span("Document généré le ");
+                        x.Span(DateTime.Now.ToString("dd/MM/yyyy à HH:mm")).Bold();
+                        x.Span(" | Page ");
+                        x.CurrentPageNumber();
+                    });
+                });
             });
-                    
-                    
-        }); 
-            return document.GeneratePdf(); 
-        } 
-        } 
+
+            return document.GeneratePdf();
+        }
+    }
 }
