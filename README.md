@@ -9,6 +9,7 @@ Ce projet permet de gérer les équipements informatiques d'une organisation ain
 - Suivi des garanties et des statuts des équipements (En service, En panne, Hors service)
 - Historique des affectations avec date de retour et commentaires
 - Authentification et gestion des rôles avec **ASP.NET Identity**
+- Dashboard (statistiques des équipements)
 - Protection contre les attaques courantes (**XSS, CSRF**)
 
 ## 🛠️ Technologies utilisées
